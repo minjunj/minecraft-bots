@@ -1,9 +1,13 @@
-const mineflayer = require('mineflayer')
-const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
-const { GoalBlock, GoalNear } = goals
-const { mineflayer: mineflayerViewer } = require('prismarine-viewer')
+import mineflayer, { Bot } from 'mineflayer'
+import { pathfinder, Movements, goals } from 'mineflayer-pathfinder'
+import { mineflayer as mineflayerViewer } from 'prismarine-viewer'
+import { Block } from 'prismarine-block'
 
-const bot = mineflayer.createBot({
+const { GoalNear } = goals
+
+console.log('TS Starting bot...')
+
+const bot: Bot = mineflayer.createBot({
   host: '20.243.34.235',
   port: 25565,
   username: 'MyBot2',
@@ -15,7 +19,7 @@ const bot = mineflayer.createBot({
 bot.loadPlugin(pathfinder)
 
 let isMining = false
-const failedBlocks = new Set()
+const failedBlocks = new Set<string>()
 
 // Clear failed blocks every 30 seconds to retry them later
 setInterval(() => {
@@ -23,14 +27,14 @@ setInterval(() => {
 }, 30000)
 
 // Auto-mining function
-async function autoMine() {
+async function autoMine(): Promise<void> {
   if (isMining) return
   isMining = true
 
   try {
     // Find nearest valuable block (stone, coal, iron, etc.)
     const blockToMine = bot.findBlock({
-      matching: (block) => {
+      matching: (block: Block) => {
         if (!block || !block.position) return false
 
         const blockKey = `${block.position.x},${block.position.y},${block.position.z}`
@@ -57,7 +61,7 @@ async function autoMine() {
       // Wait for pathfinding with timeout
       await Promise.race([
         bot.pathfinder.goto(new GoalNear(blockToMine.position.x, blockToMine.position.y, blockToMine.position.z, 1)),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Pathfinding timeout')), 5000))
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Pathfinding timeout')), 5000))
       ])
 
       // Mine the block if we're close enough
@@ -86,7 +90,7 @@ async function autoMine() {
         try {
           await Promise.race([
             bot.pathfinder.goto(new GoalNear(Math.floor(x), Math.floor(y), Math.floor(z), 2)),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('Exploration timeout')), 5000))
+            new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Exploration timeout')), 5000))
           ])
         } catch (exploreErr) {
           console.log('Exploration failed, trying different direction...')
@@ -96,7 +100,8 @@ async function autoMine() {
       setTimeout(autoMine, 1000)
     }
   } catch (err) {
-    console.log('Error during mining:', err.message)
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+    console.log('Error during mining:', errorMessage)
 
     // Try to explore when stuck
     if (bot.entity && bot.entity.position) {
@@ -131,7 +136,7 @@ bot.once('spawn', () => {
   }, 2000)
 })
 
-bot.on('chat', (username, message) => {
+bot.on('chat', (username: string, message: string) => {
   if (username === bot.username) return
   if (message === 'hi') bot.chat(`Hello ${username}!`)
   if (message === 'stop') {
@@ -148,10 +153,10 @@ bot.on('chat', (username, message) => {
   }
 })
 
-bot.on('error', (err) => {
+bot.on('error', (err: Error) => {
   console.log('Bot error:', err)
 })
 
-bot.on('kicked', (reason) => {
+bot.on('kicked', (reason: string) => {
   console.log('Bot was kicked:', reason)
 })

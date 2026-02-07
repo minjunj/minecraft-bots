@@ -2,9 +2,12 @@
   "name": "mineflayer-bot",
   "version": "1.0.0",
   "description": "Mineflayer bot",
-  "main": "bot.js",
+  "main": "dist/bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "dev": "tsx src/bot.ts",
+    "build": "tsc",
+    "start": "npm run build && node dist/bot.js",
+    "start:legacy": "node bot.js"
   },
   "dependencies": {
     "canvas": "^3.2.1",
@@ -13,5 +16,10 @@
     "prismarine-viewer": "^1.33.0"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
 }
