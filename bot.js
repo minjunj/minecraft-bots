@@ -1,9 +1,10 @@
 const mineflayer = require('mineflayer')
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
 const { GoalBlock, GoalNear } = goals
+const { mineflayer: mineflayerViewer } = require('prismarine-viewer')
 
 const bot = mineflayer.createBot({
-  host: '0.0.0.0',
+  host: '20.243.34.235',
   port: 25565,
   username: 'MyBot2',
   version: '1.21.9',
@@ -114,9 +115,15 @@ async function autoMine() {
   }
 }
 
-bot.on('spawn', () => {
+bot.once('spawn', () => {
   console.log('Spawned — I am ready!')
   console.log('Starting auto-mining bot...')
+
+  // Initialize prismarine-viewer
+  mineflayerViewer(bot, { port: 3000, firstPerson: false })
+  console.log('Prismarine viewer started on http://localhost:3000')
+  mineflayerViewer(bot, { port: 3001, firstPerson: true })
+  console.log('Prismarine viewer started on firstPerson http://localhost:3001')
 
   // Start auto-mining after 2 seconds
   setTimeout(() => {

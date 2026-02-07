@@ -11,8 +11,33 @@
 			devShell = pkgs.mkShell {
 				buildInputs = [
 					pkgs.nodejs_22
+					pkgs.pkg-config
+					pkgs.cairo
+					pkgs.pango
+					pkgs.libjpeg
+					pkgs.giflib
+					pkgs.librsvg
+					pkgs.util-linux
+					pkgs.freetype
+					pkgs.fontconfig
+					pkgs.pixman
+					pkgs.glib
+					pkgs.harfbuzz
 				];
 				shellHook = ''
+					export LD_LIBRARY_PATH="${pkgs.lib.makeLibraryPath [
+						pkgs.cairo
+						pkgs.pango
+						pkgs.libjpeg
+						pkgs.giflib
+						pkgs.librsvg
+						pkgs.util-linux
+						pkgs.freetype
+						pkgs.fontconfig
+						pkgs.pixman
+						pkgs.glib
+						pkgs.harfbuzz
+					]}:$LD_LIBRARY_PATH"
 					echo "Welcome to the Mineflayer bot dev shell!"
 				'';
 			};
