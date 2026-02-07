@@ -1,16 +1,19 @@
 {
   "name": "mineflayer-bot",
   "version": "1.0.0",
-  "description": "Mineflayer bot",
-  "main": "dist/bot.js",
+  "description": "AI-Powered Autonomous Minecraft Bot with OpenAI GPT",
+  "main": "dist/ai-bot.js",
   "scripts": {
-    "dev": "tsx src/bot.ts",
+    "dev": "tsx -r dotenv/config src/ai-bot.ts",
+    "dev:log": "mkdir -p logs && tsx -r dotenv/config src/ai-bot.ts 2>&1 | tee logs/bot-$(date +%Y%m%d-%H%M%S).log",
     "build": "tsc",
-    "start": "npm run build && node dist/bot.js",
-    "start:legacy": "node bot.js"
+    "start": "npm run build && node -r dotenv/config dist/ai-bot.js",
+    "start:log": "npm run build && mkdir -p logs && node -r dotenv/config dist/ai-bot.js 2>&1 | tee logs/bot-$(date +%Y%m%d-%H%M%S).log"
   },
   "dependencies": {
     "canvas": "^3.2.1",
+    "dotenv": "^17.2.4",
+    "minecraft-data": "^3.103.0",
     "mineflayer": "^4.34.0",
     "mineflayer-pathfinder": "^2.4.5",
     "prismarine-viewer": "^1.33.0"

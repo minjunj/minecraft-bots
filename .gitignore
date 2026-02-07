@@ -4,3 +4,6 @@
 /node_modules/
 /.envrc
 /dist/
+/.env
+/logs/
+*.log

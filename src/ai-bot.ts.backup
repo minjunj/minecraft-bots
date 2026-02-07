@@ -1,0 +1,434 @@
+import mineflayer, { Bot } from 'mineflayer'
+import { pathfinder } from 'mineflayer-pathfinder'
+import { mineflayer as mineflayerViewer } from 'prismarine-viewer'
+import { PerceptionSystem } from './perception'
+import { LLMAgent } from './llm-agent'
+import { PlanParser } from './plan-parser'
+import { ActionExecutor } from './action-executor'
+import { TaskQueue, Task } from './task-queue'
+import { BotConfig, LLMConfig } from './types'
+
+export class AIBot {
+  private bot: Bot
+  private perception: PerceptionSystem
+  private llmAgent: LLMAgent
+  private planParser: PlanParser
+  private actionExecutor: ActionExecutor
+  private taskQueue: TaskQueue
+
+  private isExecutingTask = false
+  private isRequestingPlan = false
+  private isChatting = false
+  private executionInterval: NodeJS.Timeout | null = null
+  private TASK_EXECUTION_INTERVAL = 1000 // Check for next task every 1 second
+
+  constructor(botConfig: BotConfig, llmConfig: LLMConfig) {
+    // Create bot
+    this.bot = mineflayer.createBot(botConfig)
+
+    // Load plugins
+    this.bot.loadPlugin(pathfinder)
+
+    // Initialize systems
+    this.perception = new PerceptionSystem(this.bot)
+    this.llmAgent = new LLMAgent(llmConfig)
+    this.planParser = new PlanParser()
+    this.actionExecutor = new ActionExecutor(this.bot)
+    this.taskQueue = new TaskQueue()
+
+    // Setup event handlers
+    this.setupEventHandlers()
+  }
+
+  private setupEventHandlers(): void {
+    // Bot spawned
+    this.bot.once('spawn', () => {
+      console.log('[AIBot] 🤖 Bot spawned and ready!')
+
+      // Initialize viewers
+      try {
+        mineflayerViewer(this.bot, { port: 3000, firstPerson: false })
+        console.log('[AIBot] 👁️  Viewer (3rd person) started on http://localhost:3000')
+      } catch (err) {
+        console.log('[AIBot] Could not start 3rd person viewer:', err)
+      }
+
+      try {
+        mineflayerViewer(this.bot, { port: 3001, firstPerson: true })
+        console.log('[AIBot] 👁️  Viewer (1st person) started on http://localhost:3001')
+      } catch (err) {
+        console.log('[AIBot] Could not start 1st person viewer:', err)
+      }
+
+      // Start goal-based task execution
+      this.startTaskExecution()
+
+      // Announce presence and request initial plan
+      setTimeout(() => {
+        this.bot.chat('Hello! I am an AI-powered bot. I\'m here to help and explore!')
+        this.requestNewPlan()
+      }, 2000)
+    })
+
+    // Player chat - trigger LLM decision
+    this.bot.on('chat', async (username: string, message: string) => {
+      if (username === this.bot.username) return
+
+      console.log(`[AIBot] 💬 Chat from ${username}: ${message}`)
+
+      // Process chat message with LLM
+      await this.handleChatMessage(username, message)
+    })
+
+    // Health monitoring
+    this.bot.on('health', () => {
+      if (this.bot.health < 5 && this.bot.health > 0) {
+        console.warn(`[AIBot] ⚠️  CRITICAL HEALTH: ${this.bot.health}/20`)
+      }
+    })
+
+    // Error handling
+    this.bot.on('error', (err: Error) => {
+      console.error('[AIBot] ❌ Bot error:', err.message)
+    })
+
+    this.bot.on('kicked', (reason: string) => {
+      console.error('[AIBot] ⛔ Bot was kicked:', reason)
+      this.stopAutonomousBehavior()
+    })
+
+    this.bot.on('end', () => {
+      console.log('[AIBot] 👋 Bot disconnected')
+      this.stopAutonomousBehavior()
+    })
+  }
+
+  /**
+   * Start autonomous behavior loop
+   */
+  private startAutonomousBehavior(): void {
+    console.log('[AIBot] 🔄 Starting autonomous behavior loop')
+
+    // Initial delay
+    setTimeout(() => {
+      this.autonomousTick()
+    }, 3000)
+
+    // Regular ticks
+    this.autonomousInterval = setInterval(() => {
+      this.autonomousTick()
+    }, this.AUTONOMOUS_TICK_RATE)
+  }
+
+  /**
+   * Stop autonomous behavior loop
+   */
+  private stopAutonomousBehavior(): void {
+    if (this.autonomousInterval) {
+      clearInterval(this.autonomousInterval)
+      this.autonomousInterval = null
+      console.log('[AIBot] ⏸️  Stopped autonomous behavior loop')
+    }
+  }
+
+  /**
+   * Autonomous behavior tick - make decision and act
+   */
+  private async autonomousTick(): Promise<void> {
+    // Skip if already processing
+    if (this.isProcessing) {
+      console.log('[AIBot] ⏭️  Skipping tick (still processing)')
+      return
+    }
+
+    // Skip if following someone (they're in control)
+    if (this.actionExecutor.isFollowing()) {
+      console.log('[AIBot] 👣 Following player, skipping autonomous decision')
+      return
+    }
+
+    console.log('[AIBot] 🧠 Autonomous tick...')
+
+    try {
+      this.isProcessing = true
+
+      // Gather perception
+      const perception = this.perception.gatherPerceptionData()
+
+      // Get next action from LLM
+      const command = await this.llmAgent.getNextAction(perception)
+
+      // Parse command
+      const parsedCommand = this.commandParser.parse(command)
+
+      if (!parsedCommand) {
+        console.log('[AIBot] ⚠️  Failed to parse command:', command)
+        return
+      }
+
+      // Skip unproductive commands in autonomous mode
+      if (parsedCommand.type === 'chat') {
+        console.log('[AIBot] ⏭️  Skipping chat command in autonomous mode')
+        return
+      }
+
+      if (parsedCommand.type === 'look') {
+        console.log('[AIBot] ⏭️  Skipping look command in autonomous mode (unproductive)')
+        return
+      }
+
+      if (parsedCommand.type === 'wait') {
+        console.log('[AIBot] ⏭️  Skipping wait command in autonomous mode')
+        return
+      }
+
+      // Execute command
+      console.log(`[AIBot] ⚡ Executing: ${parsedCommand.type}`)
+      const success = await this.actionExecutor.execute(parsedCommand)
+
+      // Log failure if command didn't succeed
+      if (!success) {
+        const actionDesc = this.getActionDescription(parsedCommand)
+        this.perception.logFailure(
+          parsedCommand.type,
+          `${actionDesc} failed`,
+          this.getFailureContext(parsedCommand)
+        )
+      }
+
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+      console.error('[AIBot] ❌ Error in autonomous tick:', errorMsg)
+    } finally {
+      this.isProcessing = false
+    }
+  }
+
+  /**
+   * Handle chat message from player
+   */
+  private async handleChatMessage(username: string, message: string): Promise<void> {
+    // Check if already processing a chat (prevent spam)
+    if (this.isChatting) {
+      console.log('[AIBot] 💬 Already processing chat, please wait...')
+      return
+    }
+
+    try {
+      this.isChatting = true
+
+      // Gather perception (lightweight)
+      const perception = this.perception.gatherPerceptionData()
+
+      // Format message for LLM
+      const userMessage = `Player ${username} says: "${message}"\n\nRespond with a 'chat' command to reply, or another action if needed.`
+
+      console.log('[AIBot] 💬 Processing chat from', username)
+
+      // Get LLM response with timeout handling
+      let command: string
+      try {
+        command = await this.llmAgent.getNextAction(perception, userMessage)
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+        console.error('[AIBot] ❌ LLM error:', errorMsg)
+
+        if (errorMsg.includes('timeout')) {
+          this.bot.chat('Sorry, I\'m thinking too long. I\'ll continue with what I was doing.')
+        } else {
+          this.bot.chat('Sorry, I encountered an error. I\'ll continue autonomously.')
+        }
+        return
+      }
+
+      // Parse command
+      const parsedCommand = this.commandParser.parse(command)
+
+      if (!parsedCommand) {
+        console.log('[AIBot] ⚠️  Failed to parse command from chat:', command)
+        this.bot.chat('Sorry, I\'m not sure how to respond to that. I\'ll continue what I was doing.')
+        return
+      }
+
+      // If it's a chat command, execute immediately (parallel)
+      if (parsedCommand.type === 'chat') {
+        console.log(`[AIBot] 💬 Responding: ${parsedCommand.type}`)
+        const success = await this.actionExecutor.execute(parsedCommand)
+
+        if (!success) {
+          console.log('[AIBot] ⚠️  Chat command failed')
+        }
+      }
+      // If it's another command, check if we can execute it
+      else {
+        console.log(`[AIBot] ⚡ Chat triggered action: ${parsedCommand.type}`)
+
+        // Wait for current task to finish if needed
+        if (this.isProcessing) {
+          console.log('[AIBot] ⏳ Waiting for current task to finish...')
+          this.bot.chat('I\'ll do that after I finish what I\'m doing.')
+          // Execute after current task
+          this.executeWhenReady(parsedCommand, username)
+        } else {
+          // Execute immediately if not busy
+          this.bot.chat('Sure, let me do that.')
+          await this.executeWithProcessingLock(parsedCommand, username)
+        }
+      }
+
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+      console.error('[AIBot] ❌ Error handling chat:', errorMsg)
+      this.bot.chat('Sorry, something went wrong. I\'ll continue autonomously.')
+    } finally {
+      this.isChatting = false
+    }
+  }
+
+  /**
+   * Execute command when bot becomes ready
+   */
+  private executeWhenReady(command: any, username?: string): void {
+    let waitTime = 0
+    const maxWaitTime = 30000 // 30 seconds max wait
+    const checkInterval = 500
+
+    const interval = setInterval(() => {
+      waitTime += checkInterval
+
+      if (!this.isProcessing) {
+        clearInterval(interval)
+        this.executeWithProcessingLock(command, username)
+      } else if (waitTime >= maxWaitTime) {
+        // Timeout - give up waiting
+        clearInterval(interval)
+        console.log('[AIBot] ⏰ Timeout waiting for previous task, canceling queued command')
+        if (username) {
+          this.bot.chat('Sorry, I took too long. I\'ll continue with what I\'m doing.')
+        }
+      }
+    }, checkInterval)
+  }
+
+  /**
+   * Execute command with processing lock
+   */
+  private async executeWithProcessingLock(command: any, username?: string): Promise<void> {
+    this.isProcessing = true
+    try {
+      const success = await this.actionExecutor.execute(command)
+
+      if (!success) {
+        // Log failure
+        const actionDesc = this.getActionDescription(command)
+        this.perception.logFailure(
+          command.type,
+          `${actionDesc} failed`,
+          this.getFailureContext(command)
+        )
+
+        if (username) {
+          // Notify player of failure
+          this.bot.chat('Sorry, I couldn\'t complete that task.')
+        }
+      } else if (success && username) {
+        // Notify player of success for certain commands
+        if (command.type === 'follow') {
+          this.bot.chat('Following you!')
+        } else if (command.type === 'stop_follow') {
+          this.bot.chat('Stopped following.')
+        } else if (command.type === 'mine' || command.type === 'craft' || command.type === 'toss') {
+          this.bot.chat('Done!')
+        }
+      }
+    } catch (err) {
+      console.error('[AIBot] Error executing command:', err)
+      if (username) {
+        this.bot.chat('I encountered an error. I\'ll continue autonomously.')
+      }
+    } finally {
+      this.isProcessing = false
+    }
+  }
+
+  /**
+   * Get action description for logging
+   */
+  private getActionDescription(command: any): string {
+    switch (command.type) {
+      case 'mine':
+        return command.blockType ? `mine ${command.blockType}` : `mine at coordinates`
+      case 'move':
+        return `move to (${command.x}, ${command.y}, ${command.z})`
+      case 'craft':
+        return `craft ${command.item}`
+      case 'attack':
+        return `attack ${command.target}`
+      case 'toss':
+        return command.player ? `toss ${command.item} to ${command.player}` : `toss ${command.item}`
+      case 'follow':
+        return `follow ${command.player}`
+      case 'equip':
+        return `equip ${command.item}`
+      default:
+        return command.type
+    }
+  }
+
+  /**
+   * Get failure context for better debugging
+   */
+  private getFailureContext(command: any): string {
+    const pos = this.bot.entity.position
+    return `at (${pos.x.toFixed(0)}, ${pos.y.toFixed(0)}, ${pos.z.toFixed(0)})`
+  }
+
+  /**
+   * Get the underlying bot instance
+   */
+  public getBot(): Bot {
+    return this.bot
+  }
+}
+
+// Main entry point
+if (require.main === module) {
+  // Load environment variables
+  require('dotenv').config()
+
+  const botConfig: BotConfig = {
+    host: process.env.MINECRAFT_HOST || '20.243.34.235',
+    port: parseInt(process.env.MINECRAFT_PORT || '25565'),
+    username: process.env.BOT_USERNAME || 'AIBot',
+    version: process.env.MINECRAFT_VERSION || '1.21.9',
+    auth: 'offline'
+  }
+
+  const llmConfig: LLMConfig = {
+    apiKey: process.env.LLM_API_KEY || '',
+    model: process.env.LLM_MODEL || 'gpt-4',
+    maxTokens: parseInt(process.env.LLM_MAX_TOKENS || '512'),
+    temperature: parseFloat(process.env.LLM_TEMPERATURE || '0.7'),
+    personality: process.env.BOT_PERSONALITY || 'default'
+  }
+
+  // Validate API key
+  if (!llmConfig.apiKey) {
+    console.error('❌ ERROR: LLM_API_KEY not set!')
+    console.error('Please set it in .env file or environment variable')
+    console.error('Example: export LLM_API_KEY=sk-...')
+    process.exit(1)
+  }
+
+  console.log('='.repeat(60))
+  console.log('🤖 AI-Powered Minecraft Bot')
+  console.log('='.repeat(60))
+  console.log('📡 Host:', botConfig.host)
+  console.log('👤 Username:', botConfig.username)
+  console.log('🧠 LLM Model:', llmConfig.model)
+  console.log('🌡️  Temperature:', llmConfig.temperature)
+  console.log('='.repeat(60))
+
+  // Create and start bot
+  new AIBot(botConfig, llmConfig)
+}
