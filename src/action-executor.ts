@@ -370,7 +370,16 @@ export class ActionExecutor {
   }
 
   private async executePlace(command: Command & { type: 'place' }): Promise<boolean> {
-    const { block, x, y, z } = command
+    let { block, x, y, z } = command
+
+    // Auto-generate coordinates if not provided (marker: -999)
+    if (x === -999 || y === -999 || z === -999) {
+      const botPos = this.bot.entity.position
+      x = Math.floor(botPos.x) + 1
+      y = Math.floor(botPos.y)
+      z = Math.floor(botPos.z)
+      console.log(`[ActionExecutor] Auto-generated coordinates for place: (${x}, ${y}, ${z})`)
+    }
 
     // Check if this block type already exists nearby
     const existingBlock = this.bot.findBlock({

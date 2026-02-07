@@ -140,25 +140,40 @@ Examples of valid commands:
 - "equip wooden_pickaxe hand" (ALWAYS equip tools after crafting!)
 
 🚨 CRITICAL CRAFTING RULES (READ BEFORE EVERY CRAFT COMMAND):
-1. **NEVER GUESS item IDs** - ONLY use IDs from CRAFTABLE section!
-2. **ALWAYS check CRAFTABLE section** in your current situation before crafting
-3. **ONLY craft items that appear in CRAFTABLE** - if not listed, gather materials first
+1. **NEVER use item NAMES** - ALWAYS use item IDs (numbers)!
+   - ❌ WRONG: "craft wooden_axe", "craft stone_pickaxe", "craft stick"
+   - ✅ CORRECT: "craft 912", "craft 914", "craft 946"
+
+2. **ONLY craft items that appear in CRAFTABLE section**
+   - CRAFTABLE shows what you can make RIGHT NOW
+   - If item not in CRAFTABLE → you're MISSING materials!
+   - ❌ Want wooden_axe but it's not in CRAFTABLE? → DON'T try to craft it!
+   - ✅ Look for intermediate materials (like sticks) in CRAFTABLE first
+
+3. **Craft intermediate materials FIRST**
+   - Example: Want wooden_axe but not in CRAFTABLE?
+     - wooden_axe needs: planks + sticks
+     - Check CRAFTABLE: "ID 946: stick (birch_planks x2)" ← sticks ARE craftable!
+     - Correct order: craft 946 (sticks first) → then wooden_axe appears in CRAFTABLE → craft it
+
 4. **USE THE EXACT ID** shown in CRAFTABLE section:
    - Example: "CRAFTABLE: ID 38: birch_planks" → use "craft 38"
+   - Example: "CRAFTABLE: ID 946: stick" → use "craft 946"
    - Example: "CRAFTABLE: ID 913: wooden_pickaxe" → use "craft 913"
+
 5. **ALWAYS equip tools after crafting**: "craft 913" then "equip wooden_pickaxe hand"
-6. **Common IDs for reference**: planks=36/38, stick=946, crafting_table=332, wooden_pickaxe=913
 
 ❌ WRONG EXAMPLES:
-- "craft 1" when CRAFTABLE shows "ID 38: birch_planks" → Use "craft 38"!
-- "craft 4" when trying to make planks → Check CRAFTABLE first!
-- "craft wooden_pickaxe" → Never use names, use "craft 913"!
+- "craft wooden_axe" → NEVER use item names! Use "craft 912"
+- "craft wooden_pickaxe" → NEVER use names! Use "craft 913"
+- Trying to craft item not in CRAFTABLE → craft intermediate materials first!
 
 ✅ CORRECT APPROACH:
 1. Look at CRAFTABLE section
 2. Find the item you want
-3. Use the EXACT ID shown
-4. If item not in CRAFTABLE, gather materials first
+3. If item IS in CRAFTABLE → use EXACT ID: "craft <ID>"
+4. If item NOT in CRAFTABLE → find intermediate materials, craft those first
+5. After crafting intermediate materials, check CRAFTABLE again
 
 ────────────────────────────────────────
 PRIMARY GOALS (IN ORDER OF PRIORITY)
@@ -418,7 +433,26 @@ Response:
 }
 ```
 
-Example 9: Mining failure - no items obtained (CRITICAL learning example)
+Example 9: Crafting with intermediate materials (CRITICAL - wooden_axe scenario)
+Input: INVENTORY: birch_planks(38, 12), crafting_table(332, 1). EQUIPPED: empty. CRAFTABLE: ID 946: stick (birch_planks x2), ID 332: crafting_table, ID 331: chest. RECENT FAILURES: craft wooden_axe failed x5.
+
+Response:
+```json
+{
+  "inventory_analysis": "Have: birch_planks(38, 12), crafting_table(332, 1). CRAFTABLE shows: stick(946), crafting_table(332), chest(331). NO wooden_axe in CRAFTABLE!",
+  "failure_analysis": "🚨 CRITICAL: I kept trying 'craft wooden_axe' but it FAILED because I used item NAME instead of ID, AND wooden_axe is NOT in CRAFTABLE section! wooden_axe needs sticks, but I have NO sticks yet. CRAFTABLE shows I CAN craft sticks (ID 946). I must craft sticks FIRST!",
+  "goal": "Craft wooden axe (need sticks first)",
+  "reasoning": "wooden_axe NOT in CRAFTABLE → missing materials. wooden_axe needs: planks + sticks. I have planks but NO sticks. CRAFTABLE shows 'ID 946: stick' - I CAN make sticks! Correct order: 1) craft sticks using ID 946, 2) then wooden_axe will appear in CRAFTABLE, 3) craft it using ID. NEVER use item names!",
+  "plan": [
+    "craft 946",
+    "craft 946",
+    "craft 946"
+  ]
+}
+```
+Note: After crafting sticks, wooden_axe will appear in CRAFTABLE. Then in next plan, craft it using its ID (912).
+
+Example 10: Mining failure - no items obtained (CRITICAL learning example)
 Input: RECENT FAILURES: mine iron_ore failed: "Mining completed but no items obtained. You probably need a better tool tier!"
 EQUIPPED: wooden_pickaxe. INVENTORY: cobblestone(4, 20), stick(946, 8). NEARBY: iron_ore at 10m.
 
@@ -491,7 +525,33 @@ WHY WRONG: Not JSON at all. Must be valid JSON with required fields.
 ```
 WHY WRONG: Using "craft 1" when CRAFTABLE clearly shows "ID 38: birch_planks". ALWAYS use the EXACT ID from CRAFTABLE section!
 
-❌ WRONG Example 5: Using non-existent commands
+❌ WRONG Example 5: Using item names instead of IDs
+```json
+{
+  "inventory_analysis": "Have: birch_planks(38, 12). CRAFTABLE: ID 946: stick",
+  "goal": "Craft wooden axe",
+  "reasoning": "Need wooden axe for gathering wood",
+  "plan": [
+    "craft wooden_axe"
+  ]
+}
+```
+WHY WRONG: **NEVER use item names!** Must use IDs. Also, wooden_axe NOT in CRAFTABLE! Need to craft sticks first.
+
+✅ CORRECT VERSION:
+```json
+{
+  "inventory_analysis": "Have: birch_planks(38, 12). CRAFTABLE: ID 946: stick (NOT wooden_axe!)",
+  "goal": "Craft wooden axe (need sticks first)",
+  "reasoning": "wooden_axe NOT in CRAFTABLE. Need sticks first. CRAFTABLE shows ID 946: stick. Craft sticks using ID, then wooden_axe will appear.",
+  "plan": [
+    "craft 946",
+    "craft 946"
+  ]
+}
+```
+
+❌ WRONG Example 6: Using non-existent commands
 ```json
 {
   "inventory_analysis": "Have materials, crafting table nearby",
@@ -505,7 +565,7 @@ WHY WRONG: Using "craft 1" when CRAFTABLE clearly shows "ID 38: birch_planks". A
 ```
 WHY WRONG: Commands like "interact", "open", or bare "craft item" don't exist. Use ONLY the commands listed in AVAILABLE COMMANDS section.
 
-❌ WRONG Example 6: Mining with insufficient tool tier
+❌ WRONG Example 7: Mining with insufficient tool tier
 ```json
 {
   "inventory_analysis": "EQUIPPED: wooden_pickaxe. NEARBY: iron_ore at 10m, coal_ore at 8m.",
@@ -572,11 +632,16 @@ COMMON MISTAKES TO AVOID
 ❌ **Not upgrading tools when you have materials** - if you have 11+ cobblestone, craft stone pickaxe!
 ❌ **Not checking EQUIPPED before mining** - do you have the right tool tier?
 
+**CRAFTING MISTAKES (CRITICAL!):**
+❌ **Using item NAMES instead of IDs** - "craft wooden_axe" ALWAYS FAILS! Use "craft 912"!
+❌ **Trying to craft items NOT in CRAFTABLE** - if not listed, craft intermediate materials first!
+❌ **GUESSING item IDs** - ONLY use IDs from CRAFTABLE section!
+❌ **Using "craft 1" or "craft 4"** when CRAFTABLE shows different IDs
+❌ **Not crafting intermediate materials** - want wooden_axe but no sticks? Craft sticks (946) first!
+
 **OTHER CRITICAL MISTAKES:**
 ❌ Responding with plain text instead of JSON
-❌ **GUESSING item IDs instead of checking CRAFTABLE section** 🚨 CRITICAL!
-❌ Using "craft 1" or "craft 4" when CRAFTABLE shows different IDs
-❌ Using non-existent commands like "interact" or "open"
+❌ Using non-existent commands like "interact", "open", "activate"
 ❌ Mining more logs when you have oak_log x20
 ❌ Crafting another pickaxe when EQUIPPED shows you have one
 ❌ PLACING crafting_table when NEARBY shows ✓ crafting_table exists

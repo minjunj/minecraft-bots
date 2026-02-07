@@ -176,17 +176,25 @@ export class CommandParser {
   }
 
   private parsePlace(parts: string[]): Command | null {
-    // place <block> <x> <y> <z>
-    if (parts.length < 5) return null
+    // place <block> <x> <y> <z>  OR  place <block> (coordinates auto-generated)
+    if (parts.length < 2) return null
 
     const block = parts[1]
-    const x = parseFloat(parts[2])
-    const y = parseFloat(parts[3])
-    const z = parseFloat(parts[4])
 
-    if (isNaN(x) || isNaN(y) || isNaN(z)) return null
+    // If coordinates provided, use them
+    if (parts.length >= 5) {
+      const x = parseFloat(parts[2])
+      const y = parseFloat(parts[3])
+      const z = parseFloat(parts[4])
 
-    return { type: 'place', block, x, y, z }
+      if (isNaN(x) || isNaN(y) || isNaN(z)) return null
+
+      return { type: 'place', block, x, y, z }
+    }
+
+    // If no coordinates, use special marker values (-999) for auto-generation in executor
+    // This allows "place crafting_table" without coordinates
+    return { type: 'place', block, x: -999, y: -999, z: -999 }
   }
 
   private parseCraft(parts: string[]): Command | null {
