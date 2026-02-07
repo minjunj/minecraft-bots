@@ -1,0 +1,5 @@
+# mineflayer
+/models/
+/.direnv/
+/node_modules/
+/.envrc
