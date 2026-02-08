@@ -19,17 +19,26 @@ export class ContextBuilder {
     // Bot status (concise)
     sections.push(this.buildStatusSection(perception))
 
+    // **THREATS FIRST** - Most critical information!
+    if (perception.nearbyEntities.length > 0) {
+      const entitiesSection = this.buildEntitiesSection(perception)
+      if (entitiesSection) {
+        sections.push(entitiesSection)
+      }
+    }
+
+    // Emergency survival section (when health is critical)
+    const survivalSection = this.buildSurvivalSection(perception)
+    if (survivalSection) {
+      sections.push(survivalSection)
+    }
+
     // Equipment (what's currently equipped)
     sections.push(this.buildEquipmentSection(perception))
 
     // Nearby resources
     if (perception.nearbyBlocks.length > 0) {
       sections.push(this.buildResourcesSection(perception))
-    }
-
-    // Threats and entities
-    if (perception.nearbyEntities.length > 0) {
-      sections.push(this.buildEntitiesSection(perception))
     }
 
     // Inventory summary
@@ -109,17 +118,25 @@ Health: ${botState.health.toFixed(1)}/20 | Food: ${botState.food}/20 | Level: ${
   }
 
   private buildResourcesSection(perception: PerceptionData): string {
-    const { nearbyBlocks } = perception
+    const { nearbyBlocks, botState } = perception
+    const botPos = botState.position
 
-    // Group by type
-    const groups = new Map<string, { count: number; closest: number }>()
+    // Group by type and keep track of closest block
+    const groups = new Map<string, { count: number; closest: number; closestPos: any }>()
     for (const block of nearbyBlocks) {
       const existing = groups.get(block.type)
       if (existing) {
         existing.count++
-        existing.closest = Math.min(existing.closest, block.distance)
+        if (block.distance < existing.closest) {
+          existing.closest = block.distance
+          existing.closestPos = block.position
+        }
       } else {
-        groups.set(block.type, { count: 1, closest: block.distance })
+        groups.set(block.type, {
+          count: 1,
+          closest: block.distance,
+          closestPos: block.position
+        })
       }
     }
 
@@ -129,6 +146,9 @@ Health: ${botState.health.toFixed(1)}/20 | Food: ${botState.food}/20 | Level: ${
       'iron_ore': 50,
       'gold_ore': 40,
       'coal_ore': 30,
+      'lapis_ore': 25,
+      'redstone_ore': 25,
+      'copper_ore': 20,
       'crafting_table': 20,
       'furnace': 20,
       'chest': 15
@@ -147,11 +167,73 @@ Health: ${botState.health.toFixed(1)}/20 | Food: ${botState.food}/20 | Level: ${
       .map(([type, data]) => {
         // Highlight important placed blocks
         const prefix = (type === 'crafting_table' || type === 'furnace' || type === 'chest') ? '✓ ' : '  '
-        return `${prefix}${type}: ${data.count} found, closest at ${data.closest.toFixed(0)}m`
+
+        // Calculate direction from bot
+        const pos = data.closestPos
+        const dx = pos.x - botPos.x
+        const dy = pos.y - botPos.y
+        const dz = pos.z - botPos.z
+
+        // Simple direction (N/S/E/W/Up/Down)
+        let direction = ''
+        if (Math.abs(dy) > 2) {
+          direction = dy > 0 ? '↑' : '↓'
+        } else {
+          const angle = Math.atan2(dz, dx) * 180 / Math.PI
+          if (angle > -45 && angle <= 45) direction = 'E'
+          else if (angle > 45 && angle <= 135) direction = 'S'
+          else if (angle > 135 || angle <= -135) direction = 'W'
+          else direction = 'N'
+        }
+
+        return `${prefix}${type}: ${data.count} found, closest at ${data.closest.toFixed(0)}m ${direction} (${Math.floor(pos.x)}, ${Math.floor(pos.y)}, ${Math.floor(pos.z)})`
       })
       .join('\n')
 
     return `NEARBY RESOURCES:\n${resourceList}`
+  }
+
+  private buildSurvivalSection(perception: PerceptionData): string {
+    const { botState, nearbyEntities } = perception
+    const health = botState.health
+
+    // Only show if health is low or hostile mobs nearby
+    const hostileMobs = nearbyEntities.filter(e => e.type === 'mob' && e.isHostile)
+
+    if (health >= 15 && hostileMobs.length === 0) {
+      return '' // No emergency
+    }
+
+    const warnings: string[] = []
+
+    if (health < 10) {
+      warnings.push('🚨 CRITICAL HEALTH! SURVIVAL IS TOP PRIORITY!')
+      warnings.push('   → STOP current task IMMEDIATELY')
+      warnings.push('   → Find food and eat OR hide in safe place')
+    } else if (health < 15) {
+      warnings.push('⚠️ LOW HEALTH - Be careful!')
+    }
+
+    if (hostileMobs.length > 0) {
+      const closest = hostileMobs.sort((a, b) => a.distance - b.distance)[0]
+      warnings.push(`🗡️  HOSTILE MOB: ${closest.name} at ${closest.distance.toFixed(1)}m!`)
+
+      if (closest.distance < 10) {
+        warnings.push('   → FIGHT or FLEE! Stop mining/crafting!')
+
+        // Check if bot has weapon
+        const hasWeapon = botState.equipment.hand &&
+                         (botState.equipment.hand.includes('sword') || botState.equipment.hand.includes('axe'))
+
+        if (hasWeapon) {
+          warnings.push(`   → You have ${botState.equipment.hand} - ATTACK the mob!`)
+        } else {
+          warnings.push('   → No weapon equipped! RUN AWAY or craft weapon!')
+        }
+      }
+    }
+
+    return warnings.length > 0 ? `🚨 EMERGENCY:\n${warnings.join('\n')}` : ''
   }
 
   private buildEntitiesSection(perception: PerceptionData): string {
@@ -164,10 +246,13 @@ Health: ${botState.health.toFixed(1)}/20 | Food: ${botState.food}/20 | Level: ${
     const parts: string[] = []
 
     if (hostileMobs.length > 0) {
-      const mobList = hostileMobs.slice(0, 3)
-        .map(m => `${m.name} at ${m.distance.toFixed(0)}m`)
-        .join(', ')
-      parts.push(`⚠️ HOSTILE: ${mobList}`)
+      const mobList = hostileMobs.slice(0, 5)
+        .map(m => {
+          const pos = m.position
+          return `${m.name} at ${m.distance.toFixed(1)}m (${Math.floor(pos.x)}, ${Math.floor(pos.y)}, ${Math.floor(pos.z)})`
+        })
+        .join('\n  ')
+      parts.push(`⚠️ HOSTILE MOBS (${hostileMobs.length}):\n  ${mobList}`)
     }
 
     if (players.length > 0) {
@@ -181,10 +266,10 @@ Health: ${botState.health.toFixed(1)}/20 | Food: ${botState.food}/20 | Level: ${
       const mobList = passiveMobs.slice(0, 2)
         .map(m => `${m.name} at ${m.distance.toFixed(0)}m`)
         .join(', ')
-      parts.push(`Mobs: ${mobList}`)
+      parts.push(`Passive: ${mobList}`)
     }
 
-    return parts.length > 0 ? `ENTITIES:\n  ${parts.join('\n  ')}` : ''
+    return parts.length > 0 ? `\n${parts.join('\n\n')}` : ''
   }
 
   private buildInventorySection(perception: PerceptionData): string {

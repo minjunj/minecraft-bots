@@ -30,9 +30,7 @@ export class TaskQueue {
     this.completedTasks = []
     this.failedTasks = []
 
-    console.log(`[TaskQueue] 📋 Loaded new plan: ${plan.goal}`)
-    console.log(`[TaskQueue] 💭 Reasoning: ${plan.reasoning}`)
-    console.log(`[TaskQueue] 📝 Tasks: ${plan.tasks.length}`)
+    console.log(`\n📋 New Plan: ${plan.goal} (${plan.tasks.length} tasks)`)
   }
 
   /**
@@ -40,7 +38,6 @@ export class TaskQueue {
    */
   public addTasks(tasks: Task[]): void {
     this.queue.push(...tasks)
-    console.log(`[TaskQueue] ➕ Added ${tasks.length} tasks to queue`)
   }
 
   /**
@@ -55,10 +52,7 @@ export class TaskQueue {
    */
   public dequeue(): Task | null {
     if (this.queue.length === 0) return null
-
-    const task = this.queue.shift()!
-    console.log(`[TaskQueue] 🎯 Executing task: ${task.description}`)
-    return task
+    return this.queue.shift()!
   }
 
   /**
@@ -66,7 +60,6 @@ export class TaskQueue {
    */
   public markCompleted(task: Task): void {
     this.completedTasks.push(task.description)
-    console.log(`[TaskQueue] ✅ Completed: ${task.description} (${this.completedTasks.length} total)`)
   }
 
   /**
@@ -77,13 +70,11 @@ export class TaskQueue {
 
     if (task.retryCount < task.maxRetries) {
       // Retry - put back in queue
-      console.log(`[TaskQueue] ⚠️  Failed: ${task.description} - Retry ${task.retryCount}/${task.maxRetries}`)
       this.queue.unshift(task) // Put at front
       return true // Will retry
     } else {
       // Max retries reached - give up
       this.failedTasks.push(`${task.description}: ${reason}`)
-      console.log(`[TaskQueue] ❌ Failed permanently: ${task.description}`)
       return false // Won't retry
     }
   }
@@ -145,7 +136,6 @@ export class TaskQueue {
     this.queue = []
     this.currentGoal = null
     this.currentReasoning = null
-    console.log('[TaskQueue] 🗑️  Queue cleared')
   }
 
   /**

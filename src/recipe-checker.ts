@@ -14,6 +14,7 @@ export class RecipeChecker {
   public getCraftableItems(inventory: InventoryItem[]): string[] {
     const mcData = require('minecraft-data')(this.bot.version)
     const craftable: string[] = []
+    const almostCraftable: string[] = []
 
     // Count what we have
     const itemCounts: { [key: string]: number } = {}
@@ -27,27 +28,27 @@ export class RecipeChecker {
       maxDistance: 32
     }) !== null || itemCounts['crafting_table'] > 0
 
-    // Important items to check
-    const importantItems = [
-      'oak_planks', 'birch_planks', 'spruce_planks',
-      'stick',
-      'crafting_table',
-      'wooden_pickaxe', 'stone_pickaxe', 'iron_pickaxe', 'diamond_pickaxe',
-      'wooden_axe', 'stone_axe', 'iron_axe',
-      'wooden_shovel', 'stone_shovel', 'iron_shovel',
-      'wooden_sword', 'stone_sword', 'iron_sword',
-      'furnace',
-      'chest',
-      'torch'
+    // Priority items - show these first if craftable
+    const priorityKeywords = [
+      'pickaxe', 'axe', 'shovel', 'hoe', 'sword',  // Tools
+      'planks', 'stick', 'torch',                   // Basic materials
+      'crafting_table', 'furnace', 'chest',        // Infrastructure
+      'iron_ingot', 'gold_ingot'                   // Smelted items
     ]
 
-    for (const itemName of importantItems) {
-      const itemData = mcData.itemsByName[itemName]
+    const priorityItems: string[] = []
+    const otherItems: string[] = []
+
+    // Check ALL items with recipes (not just a hardcoded list)
+    // This allows LLM to discover and use any craftable item based on situation
+    for (const itemId in mcData.recipes) {
+      const mcDataRecipes = mcData.recipes[itemId]
+      if (!mcDataRecipes || mcDataRecipes.length === 0) continue
+
+      const itemData = mcData.items[itemId]
       if (!itemData) continue
 
-      // Use minecraft-data recipes directly (bot.recipesFor doesn't work in 1.21.9)
-      const mcDataRecipes = mcData.recipes[itemData.id]
-      if (!mcDataRecipes || mcDataRecipes.length === 0) continue
+      const itemName = itemData.name
 
       // Check each recipe variant
       for (const recipeData of mcDataRecipes) {
@@ -58,6 +59,7 @@ export class RecipeChecker {
         // Check if we have all materials
         let canCraft = true
         const requirements: string[] = []
+        const missing: string[] = []
 
         if (recipeData.inShape) {
           // Shaped recipe
@@ -79,7 +81,7 @@ export class RecipeChecker {
 
             if (havingCount < reqCount) {
               canCraft = false
-              break
+              missing.push(`${reqItem.name} x${reqCount - havingCount}`)
             }
           }
         } else if (recipeData.ingredients) {
@@ -98,20 +100,50 @@ export class RecipeChecker {
 
             if (havingCount < reqCount) {
               canCraft = false
-              break
+              missing.push(`${reqItem.name} x${reqCount - havingCount}`)
             }
           }
         }
 
         if (canCraft) {
           const reqStr = requirements.length > 0 ? ` (${requirements.join(' + ')})` : ''
-          craftable.push(`ID ${itemData.id}: ${itemName}${reqStr}`)
+          const craftableItem = `ID ${itemData.id}: ${itemName}${reqStr}`
+
+          // Check if this is a priority item
+          const isPriority = priorityKeywords.some(keyword => itemName.includes(keyword))
+
+          if (isPriority) {
+            priorityItems.push(craftableItem)
+          } else {
+            otherItems.push(craftableItem)
+          }
+
           break // Found one craftable recipe, no need to check others
+        } else if (missing.length > 0 && missing.length <= 2) {
+          // Almost craftable - only 1-2 materials missing
+          const isPriority = priorityKeywords.some(keyword => itemName.includes(keyword))
+
+          if (isPriority) {
+            const reqStr = requirements.length > 0 ? ` (need: ${missing.join(' + ')})` : ''
+            almostCraftable.push(`ID ${itemData.id}: ${itemName}${reqStr}`)
+          }
+
+          break
         }
       }
     }
 
-    return craftable
+    // Return priority items first, then others, then almost craftable (limited to 30 total to avoid token overflow)
+    const result = [...priorityItems, ...otherItems]
+
+    // Add almost craftable section if there are items
+    if (almostCraftable.length > 0) {
+      result.push('') // Empty line separator
+      result.push('ALMOST CRAFTABLE (need 1-2 more materials):')
+      result.push(...almostCraftable.slice(0, 5)) // Limit to 5 almost craftable items
+    }
+
+    return result.slice(0, 35)
   }
 
   /**

@@ -1,6 +1,7 @@
 import { PerceptionData, LLMConfig } from './types'
 import { ContextBuilder } from './context-builder'
-import { COMMAND_GRAMMAR } from './commands'
+import * as fs from 'fs'
+import * as path from 'path'
 
 interface OpenAIMessage {
   role: 'system' | 'user' | 'assistant'
@@ -20,10 +21,12 @@ export class LLMAgent {
   private contextBuilder: ContextBuilder
   private conversationHistory: OpenAIMessage[] = []
   private maxHistoryLength = 10
+  private systemPrompt: string
 
   constructor(config: LLMConfig, contextBuilder?: ContextBuilder) {
     this.config = config
     this.contextBuilder = contextBuilder || new ContextBuilder()
+    this.systemPrompt = this.buildSystemPrompt()
   }
 
   /**
@@ -35,7 +38,6 @@ export class LLMAgent {
   ): Promise<string> {
     // Build context
     const context = this.contextBuilder.buildContext(perception)
-    const systemPrompt = this.buildSystemPrompt()
 
     // Build user message
     let userPrompt = `Current Situation:\n${context}`
@@ -58,29 +60,22 @@ If there were recent failures, add:
 DO NOT use fields like "task", "next_steps", "action", or any other structure.
 Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"`
 
-    console.log('[LLMAgent] Getting next action from LLM...')
-
     // Log LLM input
-    const debugMode = process.env.LLM_DEBUG === 'true'
-    console.log('[LLMAgent] ============ LLM INPUT ============')
-    if (debugMode) {
-      console.log('[LLMAgent] System Prompt:')
-      console.log(systemPrompt)
-      console.log('[LLMAgent] ---')
-    } else {
-      console.log('[LLMAgent] System Prompt Length:', systemPrompt.length, 'chars')
-    }
-    console.log('[LLMAgent] User Prompt:')
+    console.log('\n' + '='.repeat(80))
+    console.log('📥 LLM INPUT:')
+    console.log('-'.repeat(80))
     console.log(userPrompt)
-    console.log('[LLMAgent] ====================================')
+    console.log('='.repeat(80))
 
     try {
       // Call OpenAI
-      const response = await this.callOpenAI(systemPrompt, userPrompt)
+      const response = await this.callOpenAI(this.systemPrompt, userPrompt)
 
-      console.log('[LLMAgent] ============ LLM OUTPUT ===========')
-      console.log('[LLMAgent] Response:', response)
-      console.log('[LLMAgent] ======================================')
+      console.log('\n' + '='.repeat(80))
+      console.log('📤 LLM OUTPUT:')
+      console.log('-'.repeat(80))
+      console.log(response)
+      console.log('='.repeat(80) + '\n')
 
       return response
     } catch (err) {
@@ -111,8 +106,6 @@ Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 21
     // Add current message
     messages.push({ role: 'user', content: userMessage })
 
-    console.log('[LLMAgent] Calling OpenAI API...')
-    console.log('[LLMAgent] Messages count:', messages.length)
 
     // Create AbortController for timeout
     const controller = new AbortController()
@@ -130,7 +123,7 @@ Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 21
         body: JSON.stringify({
           model: this.config.model || 'gpt-4',
           temperature: this.config.temperature || 0.7,
-          max_tokens: this.config.maxTokens || 512,
+          max_completion_tokens: this.config.max_completion_tokens || 512,
           response_format: { type: 'json_object' },  // Force JSON output
           messages
         }),
@@ -170,84 +163,53 @@ Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 21
   }
 
   /**
-   * Get personality prompt from config
+   * Load specialization prompt from file or inline text
    */
-  private getPersonalityPrompt(): string {
-    const personality = this.config.personality
+  private loadSpecializationPrompt(): string {
+    const specialization = this.config.specialization
 
-    // If no personality specified, use default
-    if (!personality) {
-      return `## Your Personality
-- Proactive and autonomous
-- Helpful and responsive to players
-- Goal-oriented but flexible
-- Cautious about danger (hostile mobs, low health)`
+    if (!specialization) {
+      return ''
     }
 
-    // Use the custom personality text directly
-    return `## Your Personality
-${personality}`
+    // Check if it's a file path (no newlines, looks like a path)
+    if (!specialization.includes('\n') && specialization.length < 50) {
+      // Try to load from specializations directory
+      const specializationPath = path.join(__dirname, '..', 'specializations', `${specialization}.txt`)
+
+      try {
+        if (fs.existsSync(specializationPath)) {
+          return fs.readFileSync(specializationPath, 'utf-8')
+        } else {
+          return specialization
+        }
+      } catch (err) {
+        return specialization
+      }
+    }
+
+    // Use inline text as specialization
+    return specialization
   }
 
   /**
-   * Build system prompt with goals and command grammar
-   * Now uses OpenAI stored prompts for reduced token usage
+   * Build system prompt - only specialization (stored prompt is referenced by ID)
    */
   private buildSystemPrompt(): string {
     // Stored prompt is required - throw error if not configured
     if (!this.config.storedPromptId) {
       throw new Error(
         'LLM_STORED_PROMPT_ID is required! Please set it in your .env file.\n' +
-        'Get your stored prompt ID from OpenAI dashboard or create one with the full system prompt.'
+        'The common prompt (DEVELOPER_MESSAGE.txt) should already be registered in OpenAI as a stored prompt.'
       )
     }
 
-    // Return minimal system message that references the stored prompt
-    const personalityPrompt = this.getPersonalityPrompt()
+    // Load specialization prompt
+    const specializationPrompt = this.loadSpecializationPrompt()
 
-    return `You are an AI agent controlling a Minecraft bot.
-
-${personalityPrompt}
-
-Follow all instructions from your stored prompt (ID: ${this.config.storedPromptId}).
-
-CRITICAL: You MUST respond in valid JSON format as specified in the stored prompt. Never respond with plain text or explanations.`
+    // Only include specialization if provided (stored prompt handles the rest)
+    return specializationPrompt || ''
   }
-
-  /**
-   * REMOVED: Full system prompt has been moved to OpenAI stored prompt
-   * Old prompt was ~24,517 characters (~6000-7000 tokens)
-   * New approach saves ~97% tokens per API call
-   *
-   * If you need to update the prompt:
-   * 1. Go to OpenAI dashboard
-   * 2. Update stored prompt: ${this.config.storedPromptId}
-   * 3. Changes will apply immediately without code deployment
-   */
-
-  // LEGACY CODE REMOVED - The following sections are now in OpenAI stored prompt:
-  // - Minecraft expertise and game knowledge
-  // - Primary goals and decision making
-  // - Critical failure handling (🚨 CRITICAL warnings)
-  // - Learning from failures framework
-  // - Situation awareness (EQUIPPED, INVENTORY, NEARBY RESOURCES)
-  // - Command grammar and available commands
-  // - Response format (JSON with inventory_analysis, failure_analysis, goal, reasoning, plan)
-  // - 16 detailed examples showing correct and incorrect approaches
-  // - Planning guidelines and prerequisite checking
-  // - Common mistakes to avoid
-  // - Step-by-step analysis framework
-  // - Distance checking and crafting table placement logic
-  //
-  // Total removed: ~600 lines, ~24,000 characters
-
-  /**
-   * OLD buildSystemPrompt() implementation removed
-   * Was a 600+ line method with full Minecraft bot instructions
-   * Now using OpenAI stored prompts feature instead
-   *
-   * To restore if needed: check git history or STORED_PROMPT.md
-   */
 
   /**
    * Clear conversation history

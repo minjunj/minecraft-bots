@@ -19,14 +19,69 @@ export class ActionExecutor {
   private readonly MINING_REQUIREMENTS: { [key: string]: string[] } = {
     'stone': ['wooden', 'stone', 'iron', 'diamond'],
     'cobblestone': ['wooden', 'stone', 'iron', 'diamond'],
+    'coal_ore': ['wooden', 'stone', 'iron', 'diamond'],
+    'copper_ore': ['stone', 'iron', 'diamond'],
     'iron_ore': ['stone', 'iron', 'diamond'],
+    'lapis_ore': ['stone', 'iron', 'diamond'],
     'gold_ore': ['iron', 'diamond'],
+    'redstone_ore': ['iron', 'diamond'],
     'diamond_ore': ['iron', 'diamond'],
-    'obsidian': ['diamond']
+    'emerald_ore': ['iron', 'diamond'],
+    'obsidian': ['diamond'],
+    'deepslate': ['wooden', 'stone', 'iron', 'diamond'],
+    'deepslate_coal_ore': ['wooden', 'stone', 'iron', 'diamond'],
+    'deepslate_copper_ore': ['stone', 'iron', 'diamond'],
+    'deepslate_iron_ore': ['stone', 'iron', 'diamond'],
+    'deepslate_lapis_ore': ['stone', 'iron', 'diamond'],
+    'deepslate_gold_ore': ['iron', 'diamond'],
+    'deepslate_redstone_ore': ['iron', 'diamond'],
+    'deepslate_diamond_ore': ['iron', 'diamond'],
+    'deepslate_emerald_ore': ['iron', 'diamond']
   }
 
   constructor(bot: Bot) {
     this.bot = bot
+  }
+
+  /**
+   * Try to escape stuck situation by breaking nearby blocks
+   */
+  private async tryEscapeStuck(): Promise<boolean> {
+    console.log('[ActionExecutor] 🚨 Attempting to escape stuck situation...')
+
+    const botPos = this.bot.entity.position
+
+    // Try to break blocks around the bot
+    const offsets = [
+      { x: 0, y: 0, z: 0 },   // Current block
+      { x: 0, y: 1, z: 0 },   // Above
+      { x: 1, y: 0, z: 0 },   // Front
+      { x: -1, y: 0, z: 0 },  // Back
+      { x: 0, y: 0, z: 1 },   // Right
+      { x: 0, y: 0, z: -1 },  // Left
+    ]
+
+    for (const offset of offsets) {
+      const checkPos = botPos.offset(offset.x, offset.y, offset.z)
+      const block = this.bot.blockAt(checkPos)
+
+      if (block && block.name !== 'air' && this.bot.canDigBlock(block)) {
+        // Skip bedrock and other unbreakable blocks
+        if (block.name === 'bedrock' || block.name === 'barrier') continue
+
+        console.log(`[ActionExecutor] Breaking ${block.name} to escape`)
+        try {
+          await this.bot.dig(block)
+          return true
+        } catch (err) {
+          // Continue to next block
+          continue
+        }
+      }
+    }
+
+    console.log('[ActionExecutor] ❌ Could not find blocks to break for escape')
+    return false
   }
 
   /**
@@ -41,79 +96,219 @@ export class ActionExecutor {
    */
   public async execute(command: Command): Promise<boolean> {
     this.lastError = '' // Reset error
-    console.log(`[ActionExecutor] Executing: ${command.type}`)
+
+    // Log command execution
+    const cmdDesc = this.formatCommandDescription(command)
+    console.log(`🎯 ${cmdDesc}`)
 
     try {
+      let result: boolean
+
       switch (command.type) {
         case 'move':
-          return await this.executeMove(command)
-
+          result = await this.executeMove(command)
+          break
         case 'look':
-          return await this.executeLook(command)
-
+          result = await this.executeLook(command)
+          break
         case 'attack':
-          return await this.executeAttack(command)
-
+          result = await this.executeAttack(command)
+          break
         case 'mine':
-          return await this.executeMine(command)
-
+          result = await this.executeMine(command)
+          break
         case 'place':
-          return await this.executePlace(command)
-
+          result = await this.executePlace(command)
+          break
         case 'craft':
-          return await this.executeCraft(command)
-
+          result = await this.executeCraft(command)
+          break
         case 'equip':
-          return await this.executeEquip(command)
-
+          result = await this.executeEquip(command)
+          break
         case 'eat':
-          return await this.executeEat()
-
+          result = await this.executeEat()
+          break
         case 'chat':
-          return this.executeChat(command)
-
+          result = this.executeChat(command)
+          break
         case 'wait':
-          return await this.executeWait(command)
-
+          result = await this.executeWait(command)
+          break
         case 'follow':
-          return this.executeFollow(command)
-
+          result = this.executeFollow(command)
+          break
         case 'stop_follow':
-          return this.executeStopFollow()
-
+          result = this.executeStopFollow()
+          break
         case 'toss':
-          return await this.executeToss(command)
-
+          result = await this.executeToss(command)
+          break
         default:
-          console.log(`[ActionExecutor] Unknown command type`)
-          return false
+          this.lastError = 'Unknown command type'
+          result = false
       }
+
+      if (result) {
+        console.log(`   ✅ Success`)
+      } else {
+        console.log(`   ❌ Failed: ${this.lastError}`)
+      }
+
+      return result
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-      console.error(`[ActionExecutor] Error executing ${command.type}:`, errorMsg)
+      this.lastError = errorMsg
+      console.log(`   ❌ Error: ${errorMsg}`)
       return false
+    }
+  }
+
+  /**
+   * Format command for logging
+   */
+  private formatCommandDescription(command: Command): string {
+    switch (command.type) {
+      case 'move':
+        return `move (${command.x}, ${command.y}, ${command.z})`
+      case 'mine':
+        return command.blockType
+          ? `mine ${command.count || 1}x ${command.blockType}`
+          : `mine at (${command.x}, ${command.y}, ${command.z})`
+      case 'craft':
+        return `craft ${command.count || 1}x ${command.item}`
+      case 'place':
+        return `place ${command.block} at (${command.x}, ${command.y}, ${command.z})`
+      case 'equip':
+        return `equip ${command.item} to ${command.destination || 'hand'}`
+      case 'attack':
+        return `attack ${command.target}`
+      case 'follow':
+        return `follow ${command.player}`
+      case 'toss':
+        return `toss ${command.count || 1}x ${command.item}`
+      case 'chat':
+        return `chat "${command.message}"`
+      default:
+        return command.type
     }
   }
 
   private async executeMove(command: Command & { type: 'move' }): Promise<boolean> {
     const { x, y, z } = command
-    console.log(`[ActionExecutor] Moving to (${x}, ${y}, ${z})`)
+
+    // Check if already at or very close to target
+    const currentPos = this.bot.entity.position
+    const targetPos = new Vec3(x, y, z)
+    const distance = currentPos.distanceTo(targetPos)
+
+    if (distance < 2) {
+      console.log(`[ActionExecutor] ℹ️  Already at target location (distance: ${distance.toFixed(1)}m)`)
+      this.lastError = `Already at or near (${x}, ${y}, ${z}). Current position: (${Math.floor(currentPos.x)}, ${Math.floor(currentPos.y)}, ${Math.floor(currentPos.z)})`
+      return false // Don't waste time moving
+    }
+
+    console.log(`[ActionExecutor] 🚶 Moving from (${Math.floor(currentPos.x)}, ${Math.floor(currentPos.y)}, ${Math.floor(currentPos.z)}) to (${x}, ${y}, ${z}) [${distance.toFixed(1)}m]`)
 
     this.followingPlayer = null
     const movements = new Movements(this.bot)
+    movements.canDig = true // Allow digging through blocks
+    movements.maxDropDown = 4 // Allow dropping down
+    movements.allow1by1towers = false // Prevent pillar jumping (often gets stuck)
     this.bot.pathfinder.setMovements(movements)
 
+    // Track pathfinding status
+    let pathfindingFailed = false
+    let goalReached = false
+    let lastPosition = this.bot.entity.position.clone()
+    let stuckCounter = 0
+
+    const goalReachedHandler = () => {
+      goalReached = true
+    }
+
+    // Only handle noPath status (not all path_update events!)
+    const pathFindFailedHandler = (result: any) => {
+      if (result.status === 'noPath') {
+        pathfindingFailed = true
+        this.lastError = `Cannot reach (${x}, ${y}, ${z}) - no path found`
+      }
+    }
+
+    this.bot.once('goal_reached', goalReachedHandler)
+    this.bot.on('path_update', pathFindFailedHandler)
+
     try {
-      await Promise.race([
-        this.bot.pathfinder.goto(new GoalNear(x, y, z, 1)),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Movement timeout')), 15000)
-        )
-      ])
-      console.log('[ActionExecutor] Arrived at destination')
-      return true
+      const goal = new GoalNear(x, y, z, 1)
+      this.bot.pathfinder.setGoal(goal)
+
+      // Wait for either success, failure, or timeout
+      const startTime = Date.now()
+      const timeout = 15000 // 15 seconds (increased from 10s)
+
+      while (!goalReached && !pathfindingFailed && (Date.now() - startTime) < timeout) {
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        // Check if we're close enough
+        const distance = this.bot.entity.position.distanceTo(new Vec3(x, y, z))
+        if (distance < 2) {
+          goalReached = true
+          break
+        }
+
+        // Check if bot is stuck (not moving)
+        const currentPosition = this.bot.entity.position.clone()
+        const moved = currentPosition.distanceTo(lastPosition)
+
+        if (moved < 0.5) {
+          stuckCounter++
+          if (stuckCounter >= 6) { // Stuck for 3 seconds (6 * 500ms)
+            console.log(`[ActionExecutor] ⚠️ Bot appears stuck at ${currentPosition.toString()}`)
+
+            // Try to escape by breaking blocks
+            const escaped = await this.tryEscapeStuck()
+            if (escaped) {
+              console.log('[ActionExecutor] ✅ Escaped! Continuing movement...')
+              stuckCounter = 0 // Reset and continue
+            } else {
+              // Give up after failed escape attempt
+              this.lastError = `Movement stuck - bot is trapped and cannot escape`
+              pathfindingFailed = true
+              break
+            }
+          }
+        } else {
+          stuckCounter = 0 // Reset if bot is moving
+        }
+
+        lastPosition = currentPosition
+      }
+
+      // Cleanup
+      this.bot.pathfinder.setGoal(null)
+      this.bot.removeListener('goal_reached', goalReachedHandler)
+      this.bot.removeListener('path_update', pathFindFailedHandler)
+
+      if (goalReached) {
+        return true
+      }
+
+      if (pathfindingFailed) {
+        return false
+      }
+
+      // Timeout
+      this.lastError = `Movement timeout - could not reach (${x}, ${y}, ${z}) in 15 seconds`
+      return false
+
     } catch (err) {
-      console.log('[ActionExecutor] Could not reach destination')
+      // Cleanup on error
+      this.bot.pathfinder.setGoal(null)
+      this.bot.removeListener('goal_reached', goalReachedHandler)
+      this.bot.removeListener('path_update', pathFindFailedHandler)
+
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+      this.lastError = `Movement failed: ${errorMsg}`
       return false
     }
   }
@@ -124,7 +319,6 @@ export class ActionExecutor {
     if (target === 'position' && x !== undefined && y !== undefined && z !== undefined) {
       const pos = new Vec3(x, y, z)
       await this.bot.lookAt(pos)
-      console.log(`[ActionExecutor] Looking at position (${x}, ${y}, ${z})`)
       return true
     }
 
@@ -132,7 +326,6 @@ export class ActionExecutor {
       const player = this.bot.players[name]?.entity
       if (player) {
         await this.bot.lookAt(player.position.offset(0, player.height, 0))
-        console.log(`[ActionExecutor] Looking at player ${name}`)
         return true
       } else {
         console.log(`[ActionExecutor] Player ${name} not found`)
@@ -148,7 +341,6 @@ export class ActionExecutor {
 
       if (entity) {
         await this.bot.lookAt(entity.position.offset(0, entity.height / 2, 0))
-        console.log(`[ActionExecutor] Looking at entity ${name}`)
         return true
       } else {
         console.log(`[ActionExecutor] Entity ${name} not found`)
@@ -189,7 +381,6 @@ export class ActionExecutor {
       return false
     }
 
-    console.log(`[ActionExecutor] Attacking ${entity.name || 'entity'}`)
 
     try {
       // Look at target
@@ -221,7 +412,6 @@ export class ActionExecutor {
       return await this.mineBlockType(blockType, count || 1)
     }
 
-    console.log('[ActionExecutor] Invalid mine command')
     return false
   }
 
@@ -230,15 +420,17 @@ export class ActionExecutor {
     const block = this.bot.blockAt(pos)
 
     if (!block || block.name === 'air') {
-      console.log(`[ActionExecutor] No block at (${x}, ${y}, ${z})`)
       return false
     }
 
-    console.log(`[ActionExecutor] Mining ${block.name} at (${x}, ${y}, ${z})`)
 
     try {
       // Ensure we have the proper tool
-      await this.ensureProperTool(block.name)
+      const hasProperTool = await this.ensureProperTool(block.name)
+      if (!hasProperTool) {
+        this.lastError = `Cannot mine ${block.name} - missing required tool`
+        return false
+      }
 
       // Move close if needed
       const distance = this.bot.entity.position.distanceTo(pos)
@@ -247,43 +439,47 @@ export class ActionExecutor {
         this.bot.pathfinder.setMovements(movements)
         await Promise.race([
           this.bot.pathfinder.goto(new GoalNear(x, y, z, 3)),
-          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Pathfinding timeout')), 10000))
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Pathfinding timeout')), 5000))
         ])
       }
 
       // Verify block still exists
       const blockToMine = this.bot.blockAt(pos)
       if (!blockToMine || blockToMine.name === 'air') {
-        console.log(`[ActionExecutor] Block no longer exists`)
+        this.lastError = 'Block disappeared'
+        return false
+      }
+
+      // Check if bot can dig this block
+      if (!this.bot.canDigBlock(blockToMine)) {
+        this.lastError = `Cannot dig ${blockToMine.name} - wrong tool or unreachable`
         return false
       }
 
       // Get inventory count before mining
       const inventoryBefore = this.bot.inventory.items().reduce((sum, item) => sum + item.count, 0)
 
-      // Mine block with timeout
+      // Remember position where block was
+      const dropPosition = blockToMine.position.clone()
+
+      // Mine block with timeout (reduced from 15s to 5s)
       await Promise.race([
         this.bot.dig(blockToMine),
-        new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Mining timeout')), 15000))
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Mining timeout')), 5000))
       ])
 
-      // Wait a moment for items to be picked up
-      await new Promise(resolve => setTimeout(resolve, 300))
+      // Try to collect dropped items
+      const collected = await this.collectNearbyItems(dropPosition, inventoryBefore)
 
-      // Get inventory count after mining
-      const inventoryAfter = this.bot.inventory.items().reduce((sum, item) => sum + item.count, 0)
-
-      // Check if we actually obtained items
-      if (inventoryAfter <= inventoryBefore) {
-        console.log(`[ActionExecutor] ⚠️  Mined ${blockToMine.name} but got NO items - wrong tool tier?`)
-        this.lastError = `Mining ${blockToMine.name} completed but no items obtained. You probably need a better tool tier! Check TOOL REQUIREMENTS section.`
+      if (!collected) {
+        this.lastError = `Mined ${blockToMine.name} but failed to collect items`
         return false
       }
 
-      console.log(`[ActionExecutor] Mined ${blockToMine.name} - items obtained: +${inventoryAfter - inventoryBefore}`)
       return true
     } catch (err) {
-      console.log('[ActionExecutor] Mining failed:', err)
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+      this.lastError = `Mining failed: ${errorMsg}`
       return false
     }
   }
@@ -296,10 +492,19 @@ export class ActionExecutor {
       blockType = 'cobblestone'
     }
 
-    console.log(`[ActionExecutor] Mining ${targetCount}x ${blockType}`)
-
     // Ensure we have proper tool before starting
-    await this.ensureProperTool(blockType)
+    const hasProperTool = await this.ensureProperTool(blockType)
+    if (!hasProperTool) {
+      // Simple error message - let LLM figure out the solution from specialization
+      const requiredMaterials = this.MINING_REQUIREMENTS[blockType]
+      if (requiredMaterials) {
+        this.lastError = `Cannot mine ${blockType} - need ${requiredMaterials[0]}_pickaxe or better`
+        console.log(`[ActionExecutor] ❌ ${this.lastError}`)
+      } else {
+        this.lastError = `Cannot mine ${blockType} - missing required tool`
+      }
+      return false
+    }
 
     let minedCount = 0
 
@@ -312,8 +517,8 @@ export class ActionExecutor {
         })
 
         if (!block) {
-          console.log(`[ActionExecutor] No ${blockType} found nearby (mined ${minedCount}/${targetCount})`)
-          return minedCount > 0
+          this.lastError = minedCount > 0 ? '' : `No ${blockType} found nearby`
+          break
         }
 
         // Move to block
@@ -323,49 +528,64 @@ export class ActionExecutor {
           this.bot.pathfinder.setMovements(movements)
           await Promise.race([
             this.bot.pathfinder.goto(new GoalNear(block.position.x, block.position.y, block.position.z, 3)),
-            new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Pathfinding timeout')), 10000))
+            new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Pathfinding timeout')), 5000))
           ])
         }
 
         // Verify block still exists
         const blockToMine = this.bot.blockAt(block.position)
         if (!blockToMine || blockToMine.name === 'air') {
-          console.log(`[ActionExecutor] Block disappeared, skipping`)
-          continue
+          continue // Skip and try next block
+        }
+
+        // Check if bot can dig this block
+        if (!this.bot.canDigBlock(blockToMine)) {
+          const handItem = this.bot.inventory.slots[this.bot.getEquipmentDestSlot('hand')]
+          const currentTool = handItem ? handItem.name : 'hand (empty)'
+          this.lastError = `Cannot dig ${blockType} at (${blockToMine.position.x}, ${blockToMine.position.y}, ${blockToMine.position.z}) - current tool: ${currentTool}. Need proper pickaxe!`
+          console.log(`[ActionExecutor] ❌ ${this.lastError}`)
+          return false
         }
 
         // Get inventory count before mining
         const inventoryBefore = this.bot.inventory.items().reduce((sum, item) => sum + item.count, 0)
 
-        // Mine block with timeout
+        // Remember position where block was
+        const dropPosition = blockToMine.position.clone()
+
+        console.log(`[ActionExecutor] ⛏️  Mining ${blockType} at (${blockToMine.position.x}, ${blockToMine.position.y}, ${blockToMine.position.z})`)
+
+        // Mine block with timeout (reduced from 15s to 5s)
         await Promise.race([
           this.bot.dig(blockToMine),
-          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Mining timeout')), 15000))
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Mining timeout')), 5000))
         ])
 
-        // Wait a moment for items to be picked up
-        await new Promise(resolve => setTimeout(resolve, 300))
+        // Try to collect dropped items
+        const collected = await this.collectNearbyItems(dropPosition, inventoryBefore)
 
-        // Get inventory count after mining
-        const inventoryAfter = this.bot.inventory.items().reduce((sum, item) => sum + item.count, 0)
-
-        // Check if we actually obtained items
-        if (inventoryAfter <= inventoryBefore) {
-          console.log(`[ActionExecutor] ⚠️  Mined ${blockType} but got NO items - wrong tool tier?`)
-          this.lastError = `Mining ${blockType} completed but no items obtained. You probably need a better tool tier! Check TOOL REQUIREMENTS section.`
-          return false
+        if (collected) {
+          minedCount++
+          console.log(`[ActionExecutor] ✅ Mined ${minedCount}/${targetCount} ${blockType}`)
+        } else {
+          console.log(`[ActionExecutor] ⚠️ Failed to collect dropped items, trying next block...`)
+          // Failed to collect, try next block
+          continue
         }
 
-        minedCount++
-        console.log(`[ActionExecutor] Mined ${blockType} (${minedCount}/${targetCount}) - items obtained: +${inventoryAfter - inventoryBefore}`)
-
       } catch (err) {
-        console.log(`[ActionExecutor] Failed to mine ${blockType}:`, err)
-        // Continue to next block
+        const errorMsg = err instanceof Error ? err.message : String(err)
+        console.log(`[ActionExecutor] ⚠️ Mining error: ${errorMsg}, trying next block...`)
+        // Continue to next block on error (timeout, pathfinding failure, etc.)
+        continue
       }
     }
 
-    console.log(`[ActionExecutor] Finished mining ${blockType}: ${minedCount}/${targetCount}`)
+    if (minedCount === 0) {
+      this.lastError = this.lastError || `Failed to mine any ${blockType} (tried ${targetCount} times)`
+      console.log(`[ActionExecutor] ❌ ${this.lastError}`)
+    }
+
     return minedCount > 0
   }
 
@@ -378,29 +598,44 @@ export class ActionExecutor {
       x = Math.floor(botPos.x) + 1
       y = Math.floor(botPos.y)
       z = Math.floor(botPos.z)
-      console.log(`[ActionExecutor] Auto-generated coordinates for place: (${x}, ${y}, ${z})`)
+    }
+
+    // Convert block to name if it's an ID
+    const mcData = require('minecraft-data')(this.bot.version)
+    let blockName: string
+
+    if (typeof block === 'number') {
+      const blockData = mcData.blocks[block]
+      if (!blockData) {
+        this.lastError = `Unknown block ID: ${block}`
+        console.log(`[ActionExecutor] ❌ Unknown block ID: ${block}`)
+        return false
+      }
+      blockName = blockData.name
+    } else {
+      blockName = block
     }
 
     // Check if this block type already exists nearby
     const existingBlock = this.bot.findBlock({
-      matching: (b) => b && b.name === block,
+      matching: (b) => b && b.name === blockName,
       maxDistance: 32
     })
 
-    if (existingBlock && block === 'crafting_table') {
+    if (existingBlock && blockName === 'crafting_table') {
       const distance = this.bot.entity.position.distanceTo(existingBlock.position)
-      this.lastError = `${block} already exists nearby (${distance.toFixed(1)}m away). Don't place another one - use the existing one!`
-      console.log(`[ActionExecutor] ❌ ${block} already exists at ${distance.toFixed(1)}m away`)
+      this.lastError = `${blockName} already exists nearby (${distance.toFixed(1)}m away). Don't place another one - use the existing one!`
+      console.log(`[ActionExecutor] ❌ ${blockName} already exists at ${distance.toFixed(1)}m away`)
       console.log(`[ActionExecutor] No need to place another one`)
       return false
     }
 
-    // Find block in inventory
-    const item = this.bot.inventory.items().find(i => i.name === block)
+    // Find block in inventory (match by name)
+    const item = this.bot.inventory.items().find(i => i.name === blockName)
 
     if (!item) {
-      this.lastError = `${block} not in inventory. Cannot place it.`
-      console.log(`[ActionExecutor] ❌ ${block} not in inventory`)
+      this.lastError = `${blockName} not in inventory. Cannot place it.`
+      console.log(`[ActionExecutor] ❌ ${blockName} not in inventory`)
       return false
     }
 
@@ -413,7 +648,7 @@ export class ActionExecutor {
       return false
     }
 
-    console.log(`[ActionExecutor] Placing ${block} at (${x}, ${y}, ${z})`)
+    console.log(`[ActionExecutor] Placing ${blockName} at (${x}, ${y}, ${z})`)
 
     try {
       // Equip block
@@ -422,11 +657,11 @@ export class ActionExecutor {
       // Place block
       await this.bot.placeBlock(targetBlock, new Vec3(0, 1, 0))
 
-      console.log(`[ActionExecutor] ✅ Placed ${block}`)
+      console.log(`[ActionExecutor] ✅ Placed ${blockName}`)
       return true
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err)
-      this.lastError = `Cannot place ${block} at (${x}, ${y}, ${z}). ${errorMsg}. Try different coordinates or check if space is occupied.`
+      this.lastError = `Cannot place ${blockName} at (${x}, ${y}, ${z}). ${errorMsg}. Try different coordinates or check if space is occupied.`
       console.log(`[ActionExecutor] ❌ Placing failed: ${errorMsg}`)
       return false
     }
@@ -435,7 +670,6 @@ export class ActionExecutor {
   private async executeCraft(command: Command & { type: 'craft' }): Promise<boolean> {
     let { item, count = 1 } = command
 
-    console.log(`[ActionExecutor] Crafting ${count}x ${item}`)
 
     try {
       const mcData = require('minecraft-data')(this.bot.version)
@@ -621,14 +855,12 @@ export class ActionExecutor {
       return false
     }
 
-    console.log(`[ActionExecutor] Equipping ${item} to ${destination}`)
 
     try {
       await this.bot.equip(inventoryItem, destination)
       console.log(`[ActionExecutor] Equipped ${item}`)
       return true
     } catch (err) {
-      console.log('[ActionExecutor] Equipping failed')
       return false
     }
   }
@@ -716,10 +948,130 @@ export class ActionExecutor {
   }
 
   /**
+   * Collect items dropped from mining
+   */
+  private async collectNearbyItems(dropPosition: Vec3, inventoryBefore: number, maxAttempts: number = 3): Promise<boolean> {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      // Wait a bit for items to spawn
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      // Check inventory first
+      const inventoryAfter = this.bot.inventory.items().reduce((sum, item) => sum + item.count, 0)
+      if (inventoryAfter > inventoryBefore) {
+        return true // Items collected!
+      }
+
+      // Look for nearby item entities
+      const itemEntities = Object.values(this.bot.entities).filter(entity => {
+        if (!entity || entity.type !== 'object') return false
+        if (entity.kind !== 'Drops') return false
+
+        // Check if item is near the drop position (within 5 blocks)
+        const distance = entity.position.distanceTo(dropPosition)
+        return distance < 5
+      })
+
+      if (itemEntities.length === 0) {
+        continue // No items found, wait more
+      }
+
+      // Try to move to the nearest item
+      const nearestItem = itemEntities.sort((a, b) =>
+        this.bot.entity.position.distanceTo(a.position) -
+        this.bot.entity.position.distanceTo(b.position)
+      )[0]
+
+      const distanceToItem = this.bot.entity.position.distanceTo(nearestItem.position)
+
+      // If item is far, try to move to it
+      if (distanceToItem > 2) {
+        try {
+          // Check if there's a direct path
+          const movements = new Movements(this.bot)
+          this.bot.pathfinder.setMovements(movements)
+
+          const itemPos = nearestItem.position
+          await Promise.race([
+            this.bot.pathfinder.goto(new GoalNear(itemPos.x, itemPos.y, itemPos.z, 1)),
+            new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Item collection timeout')), 3000))
+          ])
+        } catch (err) {
+          // Pathfinding failed - maybe blocked
+          // Try to clear a path by breaking blocks
+          const success = await this.clearPathToItem(nearestItem.position)
+          if (!success) {
+            continue // Can't reach item, try next attempt
+          }
+        }
+      }
+
+      // Wait a bit more for auto-collection
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      // Check inventory again
+      const finalInventory = this.bot.inventory.items().reduce((sum, item) => sum + item.count, 0)
+      if (finalInventory > inventoryBefore) {
+        return true
+      }
+    }
+
+    // Failed to collect after all attempts
+    return false
+  }
+
+  /**
+   * Clear path to item by breaking blocking blocks
+   */
+  private async clearPathToItem(itemPosition: Vec3): Promise<boolean> {
+    const botPos = this.bot.entity.position
+
+    // Find blocks between bot and item
+    const direction = itemPosition.minus(botPos).normalize()
+
+    // Check block 1 block in front of bot in direction of item
+    const checkPos = botPos.offset(
+      Math.round(direction.x),
+      0,
+      Math.round(direction.z)
+    )
+
+    const blockingBlock = this.bot.blockAt(checkPos)
+
+    if (!blockingBlock || blockingBlock.name === 'air') {
+      return false // No blocking block
+    }
+
+    // Try to break the blocking block (if it's breakable)
+    if (blockingBlock.name === 'stone' ||
+        blockingBlock.name === 'dirt' ||
+        blockingBlock.name === 'grass_block' ||
+        blockingBlock.name.includes('log') ||
+        blockingBlock.name.includes('leaves')) {
+
+      try {
+        // Check if we can dig it
+        if (!this.bot.canDigBlock(blockingBlock)) {
+          return false
+        }
+
+        await Promise.race([
+          this.bot.dig(blockingBlock),
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Clearing timeout')), 3000))
+        ])
+
+        return true
+      } catch (err) {
+        return false
+      }
+    }
+
+    return false
+  }
+
+  /**
    * Auto-craft and equip appropriate tool for mining
    */
   private async ensureProperTool(blockType: string): Promise<boolean> {
-    console.log(`[ActionExecutor] Checking tool for ${blockType}`)
 
     // Get required tool materials for this block
     const requiredMaterials = this.MINING_REQUIREMENTS[blockType]
@@ -734,7 +1086,6 @@ export class ActionExecutor {
     if (handItem && handItem.name.includes('pickaxe')) {
       const material = this.TOOL_MATERIALS.find(m => handItem.name.includes(m))
       if (material && requiredMaterials.includes(material)) {
-        console.log(`[ActionExecutor] Already have ${handItem.name} equipped`)
         return true
       }
     }
@@ -748,14 +1099,12 @@ export class ActionExecutor {
       )
 
       if (pickaxe) {
-        console.log(`[ActionExecutor] Equipping ${pickaxe.name}`)
         await this.bot.equip(pickaxe, 'hand')
         return true
       }
     }
 
     // No pickaxe found, try to craft one
-    console.log(`[ActionExecutor] No suitable pickaxe found, attempting to craft`)
     return await this.autoCraftPickaxe(requiredMaterials)
   }
 
@@ -796,30 +1145,25 @@ export class ActionExecutor {
             if (tableId) {
               const tableRecipes = this.bot.recipesFor(tableId, null, 1, null)
               if (tableRecipes && tableRecipes.length > 0) {
-                console.log(`[ActionExecutor] Crafting crafting_table`)
                 await this.bot.craft(tableRecipes[0], 1)
               }
             }
           }
         }
 
-        console.log(`[ActionExecutor] Crafting ${pickaxeName}`)
         await this.bot.craft(recipe, 1)
 
         // Equip the newly crafted pickaxe
         const newPickaxe = this.bot.inventory.items().find(item => item.name === pickaxeName)
         if (newPickaxe) {
           await this.bot.equip(newPickaxe, 'hand')
-          console.log(`[ActionExecutor] Successfully crafted and equipped ${pickaxeName}`)
           return true
         }
       } catch (err) {
-        console.log(`[ActionExecutor] Cannot craft ${pickaxeName}:`, err instanceof Error ? err.message : err)
         // Continue to next material
       }
     }
 
-    console.log(`[ActionExecutor] Unable to craft any suitable pickaxe`)
     return false
   }
 
@@ -844,7 +1188,6 @@ export class ActionExecutor {
         const targetPlayer = this.bot.players[player]?.entity
         if (targetPlayer) {
           await this.bot.lookAt(targetPlayer.position.offset(0, targetPlayer.height, 0))
-          console.log(`[ActionExecutor] Looking at ${player}`)
         } else {
           console.log(`[ActionExecutor] Player ${player} not found, dropping item instead`)
         }

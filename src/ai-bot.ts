@@ -47,21 +47,18 @@ export class AIBot {
   private setupEventHandlers(): void {
     // Bot spawned
     this.bot.once('spawn', () => {
-      console.log('[AIBot] 🤖 Bot spawned and ready!')
 
       // Initialize viewers
       // Note: Viewer version is auto-detected from bot.version
       // If blocks appear incorrect, consider using MINECRAFT_VERSION=1.20.4 in .env for better viewer support
       try {
         mineflayerViewer(this.bot, { port: 3000, firstPerson: false })
-        console.log(`[AIBot] 👁️  Viewer (3rd person) started on http://localhost:3000 (bot version: ${this.bot.version})`)
       } catch (err) {
         console.log('[AIBot] Could not start 3rd person viewer:', err)
       }
 
       try {
         mineflayerViewer(this.bot, { port: 3001, firstPerson: true })
-        console.log(`[AIBot] 👁️  Viewer (1st person) started on http://localhost:3001 (bot version: ${this.bot.version})`)
       } catch (err) {
         console.log('[AIBot] Could not start 1st person viewer:', err)
       }
@@ -113,7 +110,6 @@ export class AIBot {
    * Start task execution loop
    */
   private startTaskExecution(): void {
-    console.log('[AIBot] 🔄 Starting goal-based task execution')
 
     // Execute next task every second
     this.executionInterval = setInterval(() => {
@@ -128,7 +124,6 @@ export class AIBot {
     if (this.executionInterval) {
       clearInterval(this.executionInterval)
       this.executionInterval = null
-      console.log('[AIBot] ⏸️  Stopped task execution')
     }
   }
 
@@ -148,14 +143,12 @@ export class AIBot {
 
     // If queue empty and not requesting, request new plan
     if (this.taskQueue.isEmpty() && !this.isRequestingPlan) {
-      console.log('[AIBot] 📭 Queue empty, requesting new plan...')
       await this.requestNewPlan()
       return
     }
 
     // If queue empty but requesting plan, wait
     if (this.taskQueue.isEmpty() && this.isRequestingPlan) {
-      console.log('[AIBot] ⏳ Waiting for LLM response...')
       return
     }
 
@@ -186,7 +179,6 @@ export class AIBot {
 
         if (!retryDecision) {
           // Max retries reached, task permanently failed
-          console.log('[AIBot] ⚠️  Task failed permanently, continuing with next task')
         }
       }
     } catch (err) {
@@ -205,14 +197,12 @@ export class AIBot {
    */
   private async requestNewPlan(playerMessage?: string, username?: string): Promise<void> {
     if (this.isRequestingPlan) {
-      console.log('[AIBot] ⏳ Already requesting plan, please wait...')
       return
     }
 
     this.isRequestingPlan = true
 
     try {
-      console.log('[AIBot] 🧠 Requesting new plan from LLM...')
 
       // Gather perception
       const perception = this.perception.gatherPerceptionData(this.taskQueue.getCurrentGoal() || undefined)
@@ -253,17 +243,32 @@ export class AIBot {
               statusMessage += `\n🚨 CRITICAL: "${actionType}" failed ${repeatedAction[1]} times!\n`
               statusMessage += `⚠️ STOP and REASSESS from the beginning!\n`
               statusMessage += `⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.\n`
-              statusMessage += `⚠️ Ask yourself: What basic things do I need BEFORE attempting this?\n`
-              statusMessage += `⚠️ Examples:\n`
-              statusMessage += `   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?\n`
-              statusMessage += `   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?\n`
-              statusMessage += `   - Can't craft item? Do you have ALL materials including intermediate items?\n`
+
+              // Special guidance for mine failures
+              if (actionType === 'mine') {
+                statusMessage += `\n📖 RE-READ YOUR SPECIALIZATION GUIDE!\n`
+                statusMessage += `⚠️ If error says "need X_pickaxe":\n`
+                statusMessage += `   1. Look at your specialization for X_pickaxe recipe\n`
+                statusMessage += `   2. Check INVENTORY - do you have those materials?\n`
+                statusMessage += `   3. Check "ALMOST CRAFTABLE" section - is it listed there?\n`
+                statusMessage += `   4. If missing materials, craft them FIRST!\n`
+                statusMessage += `   5. Example: Need stone_pickaxe but only have 1 stick?\n`
+                statusMessage += `      → Craft stick (946) from planks → Then craft stone_pickaxe (923)\n`
+              }
 
               // Special guidance for place failures
               if (actionType === 'place') {
-                statusMessage += `   - Can't PLACE item? Check NEARBY RESOURCES - does it ALREADY EXIST nearby?\n`
+                statusMessage += `⚠️ Can't PLACE item?\n`
+                statusMessage += `   - Check NEARBY RESOURCES - does it ALREADY EXIST nearby?\n`
                 statusMessage += `   - If NEARBY shows "✓ crafting_table" - DON'T try to place another one!\n`
                 statusMessage += `   - Read the error message - does it say "already exists nearby"? Then SKIP placing!\n`
+              }
+
+              // General guidance
+              if (actionType !== 'mine' && actionType !== 'place') {
+                statusMessage += `⚠️ Ask yourself: What basic things do I need BEFORE attempting this?\n`
+                statusMessage += `   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?\n`
+                statusMessage += `   - Can't craft item? Do you have ALL materials including intermediate items?\n`
               }
 
               statusMessage += `\n⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!\n\n`
@@ -300,7 +305,6 @@ export class AIBot {
       const plan = this.planParser.parsePlan(response)
 
       if (!plan) {
-        console.log('[AIBot] ⚠️  Failed to parse plan from LLM')
 
         if (username) {
           this.bot.chat('Sorry, I couldn\'t understand the plan. I\'ll continue exploring.')
@@ -337,10 +341,8 @@ export class AIBot {
       // Format message for LLM
       const userMessage = `Player ${username} says: "${message}"\n\nRespond appropriately. If they ask you to do something, make a plan to achieve it.`
 
-      console.log('[AIBot] 💬 Processing chat from', username)
 
       // Clear current queue and request new plan
-      console.log('[AIBot] 🔄 Interrupting current plan for player request')
       this.taskQueue.clear()
 
       // Request new plan based on player message
@@ -411,10 +413,10 @@ if (require.main === module) {
   const llmConfig: LLMConfig = {
     apiKey: process.env.LLM_API_KEY || '',
     model: process.env.LLM_MODEL || 'gpt-4',
-    maxTokens: parseInt(process.env.LLM_MAX_TOKENS || '512'),
+    max_completion_tokens: parseInt(process.env.LLM_MAX_TOKENS || '512'),
     temperature: parseFloat(process.env.LLM_TEMPERATURE || '0.7'),
-    personality: process.env.BOT_PERSONALITY || undefined,
-    storedPromptId: process.env.LLM_STORED_PROMPT_ID || undefined
+    storedPromptId: process.env.LLM_STORED_PROMPT_ID || undefined,
+    specialization: process.env.BOT_SPECIALIZATION || undefined
   }
 
   // Validate API key
@@ -425,15 +427,12 @@ if (require.main === module) {
     process.exit(1)
   }
 
-  console.log('='.repeat(60))
-  console.log('🤖 AI-Powered Minecraft Bot (Goal-Based System)')
-  console.log('='.repeat(60))
-  console.log('📡 Host:', botConfig.host)
-  console.log('👤 Username:', botConfig.username)
-  console.log('🧠 LLM Model:', llmConfig.model)
-  console.log('🌡️  Temperature:', llmConfig.temperature)
-  console.log('🎭 Personality:', llmConfig.personality || 'default')
-  console.log('='.repeat(60))
+  console.log('='.repeat(80))
+  console.log('🤖 Minecraft Bot Started')
+  console.log('='.repeat(80))
+  console.log(`📡 ${botConfig.username} → ${botConfig.host}:${botConfig.port}`)
+  console.log(`🧠 ${llmConfig.model} | 💼 ${llmConfig.specialization || 'general'}`)
+  console.log('='.repeat(80))
 
   // Create and start bot
   new AIBot(botConfig, llmConfig)

@@ -60,7 +60,6 @@ export class PerceptionSystem {
       this.failureHistory.shift()
     }
 
-    console.log(`[PerceptionSystem] 📝 Logged failure: ${action} - ${reason}`)
   }
 
   /**

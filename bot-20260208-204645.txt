@@ -1,0 +1,3587 @@
+[dotenv@17.2.4] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+================================================================================
+🤖 Minecraft Bot Started
+================================================================================
+📡 AI2026_02_08_v5 → 20.243.34.235:25565
+🧠 gpt-4o-mini | 💼 miner
+================================================================================
+Prismarine viewer web server running on *:3000
+Prismarine viewer web server running on *:3001
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-24, 69, -9)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 10m ↓ (-23, 63, 0)
+  coal_ore: 5 found, closest at 12m ↓ (-25, 59, -14)
+✓ crafting_table: 1 found, closest at 32m ↑ (-41, 87, 11)
+  stone: 5 found, closest at 5m ↓ (-24, 64, -9)
+  oak_log: 4 found, closest at 31m ↑ (-49, 73, -25)
+
+INVENTORY: Empty
+
+CRAFTABLE:
+  Nothing yet - need materials
+
+New player message: "Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I currently have an empty inventory with no materials.",
+  "goal": "Craft a wooden pickaxe to start mining iron and coal.",
+  "reasoning": "Since I have no tools and I need to mine iron ore and coal, I must first gather wooden logs to craft a wooden pickaxe.",
+  "plan": ["move -49 73 -25", "mine oak_log 4", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -49 73 -25
+[CommandParser] Parsing: mine oak_log 4
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I currently have an empty inventory with no materials.
+[PlanParser] ✅ Parsed plan with 3 tasks
+
+📋 New Plan: Craft a wooden pickaxe to start mining iron and coal. (3 tasks)
+🎯 move (-49, 73, -25)
+[ActionExecutor] 🚶 Moving from (-24, 69, -9) to (-49, 73, -25) [30.6m]
+   ✅ Success
+🎯 mine 4x oak_log
+[ActionExecutor] ⛏️  Mining oak_log at (-49, 73, -25)
+[ActionExecutor] ✅ Mined 1/4 oak_log
+[ActionExecutor] ⛏️  Mining oak_log at (-49, 74, -25)
+[ActionExecutor] ✅ Mined 2/4 oak_log
+[ActionExecutor] ⛏️  Mining oak_log at (-49, 75, -25)
+[ActionExecutor] ✅ Mined 3/4 oak_log
+[ActionExecutor] ⛏️  Mining oak_log at (-49, 76, -25)
+[ActionExecutor] ✅ Mined 4/4 oak_log
+   ✅ Success
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-48, 73, -24)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: oak_log (ID:134)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 11m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 5m S (-48, 72, -20)
+✓ crafting_table: 2 found, closest at 11m ↓ (-50, 67, -33)
+  stone: 5 found, closest at 4m ↓ (-48, 70, -22)
+  oak_log: 3 found, closest at 13m ↓ (-53, 66, -34)
+
+INVENTORY (1 item types):
+  Materials: oak_log(134, 4)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 171: oak_wood (oak_log x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [2s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+  [1s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+
+New player message: "Previous goal: "Craft a wooden pickaxe to start mining iron and coal."
+✅ Completed: move -49 73 -25, mine oak_log 4
+❌ Failed: craft 913: Execution failed
+
+⚠️ Some tasks failed - check if resources are unavailable or too far.
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 4 oak_logs in my inventory, which can be crafted into oak planks.",
+  "goal": "Craft a wooden pickaxe to start mining iron and coal.",
+  "reasoning": "I need oak planks to craft a wooden pickaxe. I can craft oak planks from the oak logs I have.",
+  "plan": ["craft 36", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: craft 36
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 4 oak_logs in my inventory, which can be crafted into oak planks.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe to start mining iron and coal. (2 tasks)
+🎯 craft 1x 36
+[ActionExecutor] Using item ID 36 (oak_planks)
+[ActionExecutor] Found recipe for oak_planks
+[ActionExecutor] Recipe requires:
+[ActionExecutor]   oak_log x1
+[ActionExecutor]   oak_planks x-4
+[ActionExecutor] Starting craft...
+[ActionExecutor] ✅ Successfully crafted 1x oak_planks
+   ✅ Success
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-48, 73, -24)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 11m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 5m S (-48, 72, -20)
+✓ crafting_table: 2 found, closest at 11m ↓ (-50, 67, -33)
+  stone: 5 found, closest at 4m ↓ (-48, 70, -22)
+  oak_log: 3 found, closest at 13m ↓ (-53, 66, -34)
+
+INVENTORY (2 item types):
+  Materials: oak_log(134, 3), oak_planks(36, 4)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 332: crafting_table (oak_planks x4)
+  ID 946: stick (oak_planks x2)
+  ID 270: oak_slab (oak_planks x3)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 892: bowl (oak_planks x3)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+  [7s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+  [2s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+  [1s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+
+New player message: "Previous goal: "Craft a wooden pickaxe to start mining iron and coal."
+✅ Completed: craft 36
+❌ Failed: craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 4 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 3 oak_logs and 4 oak_planks in my inventory, but I need a crafting table to craft a wooden pickaxe.",
+  "goal": "Place a crafting table and then craft a wooden pickaxe.",
+  "reasoning": "I need to use a crafting table to craft the wooden pickaxe, as I cannot craft directly from my inventory without it.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 3 oak_logs and 4 oak_planks in my inventory, but I need a crafting table to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Place a crafting table and then craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] 🚶 Moving from (-48, 73, -25) to (-50, 67, -33) [10.7m]
+   ✅ Success
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (2 item types):
+  Materials: oak_log(134, 3), oak_planks(36, 4)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 332: crafting_table (oak_planks x4)
+  ID 946: stick (oak_planks x2)
+  ID 270: oak_slab (oak_planks x3)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 892: bowl (oak_planks x3)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [15s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+  [10s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+  [9s ago] craft failed: craft 913 failed (at (-48, 73, -24))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Place a crafting table and then craft a wooden pickaxe."
+✅ Completed: move -50 67 -33
+❌ Failed: craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 5 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 3 oak_logs and 4 oak_planks in my inventory, but I need to place a crafting table to craft a wooden pickaxe.",
+  "goal": "Place a crafting table and craft a wooden pickaxe.",
+  "reasoning": "I have not placed a crafting table yet; I need to place it before I can craft the wooden pickaxe.",
+  "plan": ["craft 332", "move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: craft 332
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 3 oak_logs and 4 oak_planks in my inventory, but I need to place a crafting table to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 3 tasks
+
+📋 New Plan: Place a crafting table and craft a wooden pickaxe. (3 tasks)
+🎯 craft 1x 332
+[ActionExecutor] Using item ID 332 (crafting_table)
+[ActionExecutor] Found recipe for crafting_table
+[ActionExecutor] Recipe requires:
+[ActionExecutor]   oak_planks x4
+[ActionExecutor]   crafting_table x-1
+[ActionExecutor] Starting craft...
+[ActionExecutor] ✅ Successfully crafted 1x crafting_table
+   ✅ Success
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (2 item types):
+  Materials: oak_log(134, 3)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [9s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Place a crafting table and craft a wooden pickaxe."
+✅ Completed: craft 332
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 3 oak_logs and 1 crafting_table in my inventory, but I need to place the crafting table to craft a wooden pickaxe.",
+  "goal": "Place the crafting table and craft a wooden pickaxe.",
+  "reasoning": "I need to place the crafting table before I can craft the wooden pickaxe; it is necessary for crafting.",
+  "plan": ["place crafting_table", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: place crafting_table
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 3 oak_logs and 1 crafting_table in my inventory, but I need to place the crafting table to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Place the crafting table and craft a wooden pickaxe. (2 tasks)
+🎯 place crafting_table at (-999, -999, -999)
+[ActionExecutor] ❌ crafting_table already exists at 1.3m away
+[ActionExecutor] No need to place another one
+   ❌ Failed: crafting_table already exists nearby (1.3m away). Don't place another one - use the existing one!
+🎯 place crafting_table at (-999, -999, -999)
+[ActionExecutor] ❌ crafting_table already exists at 1.3m away
+[ActionExecutor] No need to place another one
+   ❌ Failed: crafting_table already exists nearby (1.3m away). Don't place another one - use the existing one!
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (2 item types):
+  Materials: oak_log(134, 3)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [7s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] place failed: crafting_table already exists nearby (1.3m away). Don't place another one - use the existing one! (at (-49, 68, -33))
+  [3s ago] place failed: crafting_table already exists nearby (1.3m away). Don't place another one - use the existing one! (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Place the crafting table and craft a wooden pickaxe."
+❌ Failed: place crafting_table: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 3 oak_logs and 1 crafting_table in my inventory. The crafting table is already placed nearby.",
+  "goal": "Equip a wooden pickaxe to mine iron and coal.",
+  "reasoning": "I need to craft a wooden pickaxe using the existing crafting table, but I forgot to equip my materials before attempting to craft.",
+  "plan": ["equip oak_log hand", "craft 946", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: equip oak_log hand
+[CommandParser] Parsing: craft 946
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 3 oak_logs and 1 crafting_table in my inventory. The crafting table is already placed nearby.
+[PlanParser] ✅ Parsed plan with 3 tasks
+
+📋 New Plan: Equip a wooden pickaxe to mine iron and coal. (3 tasks)
+🎯 equip oak_log to hand
+[ActionExecutor] Equipped oak_log
+   ✅ Success
+🎯 craft 1x 946
+[ActionExecutor] Using item ID 946 (stick)
+[ActionExecutor] ❌ No craftable recipe for stick - missing materials
+   ❌ Failed: 
+🎯 craft 1x 946
+[ActionExecutor] Using item ID 946 (stick)
+[ActionExecutor] ❌ No craftable recipe for stick - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: oak_log (ID:134)
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (2 item types):
+  Materials: oak_log(134, 3)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] craft failed: craft 946 failed (at (-49, 68, -33))
+  [3s ago] craft failed: craft 946 failed (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Equip a wooden pickaxe to mine iron and coal."
+✅ Completed: equip oak_log hand
+❌ Failed: craft 946: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 5 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 3 oak_logs and 1 crafting_table in my inventory. The crafting table is already placed nearby, but I have not crafted any sticks yet.",
+  "goal": "Craft sticks using oak planks to then craft a wooden pickaxe.",
+  "reasoning": "I need to craft sticks first before I can craft the wooden pickaxe, as the wooden pickaxe requires sticks as part of its recipe.",
+  "plan": ["craft 946", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: craft 946
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 3 oak_logs and 1 crafting_table in my inventory. The crafting table is already placed nearby, but I have not crafted any sticks yet.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft sticks using oak planks to then craft a wooden pickaxe. (2 tasks)
+🎯 craft 1x 946
+[ActionExecutor] Using item ID 946 (stick)
+[ActionExecutor] ❌ No craftable recipe for stick - missing materials
+   ❌ Failed: 
+🎯 craft 1x 946
+[ActionExecutor] Using item ID 946 (stick)
+[ActionExecutor] ❌ No craftable recipe for stick - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: oak_log (ID:134)
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (2 item types):
+  Materials: oak_log(134, 3)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [7s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] craft failed: craft 946 failed (at (-49, 68, -33))
+  [3s ago] craft failed: craft 946 failed (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft sticks using oak planks to then craft a wooden pickaxe."
+❌ Failed: craft 946: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 5 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 3 oak_logs and 1 crafting_table in my inventory, but I need oak planks to craft sticks for the wooden pickaxe.",
+  "goal": "Craft oak planks from oak logs and then craft sticks to create a wooden pickaxe.",
+  "reasoning": "I need to convert my oak_logs into oak_planks to then craft the necessary sticks for the wooden pickaxe.",
+  "plan": ["craft 36", "craft 946", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: craft 36
+[CommandParser] Parsing: craft 946
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 3 oak_logs and 1 crafting_table in my inventory, but I need oak planks to craft sticks for the wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 3 tasks
+
+📋 New Plan: Craft oak planks from oak logs and then craft sticks to create a wooden pickaxe. (3 tasks)
+🎯 craft 1x 36
+[ActionExecutor] Using item ID 36 (oak_planks)
+[ActionExecutor] Found recipe for oak_planks
+[ActionExecutor] Recipe requires:
+[ActionExecutor]   oak_log x1
+[ActionExecutor]   oak_planks x-4
+[ActionExecutor] Starting craft...
+[ActionExecutor] ✅ Successfully crafted 1x oak_planks
+   ✅ Success
+🎯 craft 1x 946
+[ActionExecutor] Using item ID 946 (stick)
+[ActionExecutor] Found recipe for stick
+[ActionExecutor] Recipe requires:
+[ActionExecutor]   oak_planks x2
+[ActionExecutor]   stick x-4
+[ActionExecutor] Starting craft...
+[ActionExecutor] ✅ Successfully crafted 1x stick
+   ✅ Success
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [9s ago] craft failed: craft 946 failed (at (-49, 68, -33))
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [7s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft oak planks from oak logs and then craft sticks to create a wooden pickaxe."
+✅ Completed: craft 36, craft 946
+❌ Failed: craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 5 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is already placed nearby.",
+  "goal": "Craft a wooden pickaxe using the available sticks and oak planks.",
+  "reasoning": "I have the necessary materials (2 oak_planks and 1 stick) to craft a wooden pickaxe, and the crafting table is already placed nearby.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is already placed nearby.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe using the available sticks and oak planks. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [7s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe using the available sticks and oak planks."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I have the necessary materials (2 oak_planks and 1 stick) to craft a wooden pickaxe. I need to ensure I am using the crafting table correctly.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [7s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is already placed nearby.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I have all the required materials to craft a wooden pickaxe (2 oak_planks and 1 stick), but I need to ensure my hand is empty before crafting.",
+  "plan": ["equip empty hand", "move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: equip empty hand
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is already placed nearby.
+[PlanParser] ✅ Parsed plan with 3 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (3 tasks)
+🎯 equip empty to hand
+[ActionExecutor] empty not in inventory
+   ❌ Failed: 
+🎯 equip empty to hand
+[ActionExecutor] empty not in inventory
+   ❌ Failed: 
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [5s ago] equip failed: equip empty failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: equip empty hand: Execution failed, move -50 67 -33: Execution failed, craft 913: Execution failed
+
+⚠️ Some tasks failed - check if resources are unavailable or too far.
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to use the crafting table to create the wooden pickaxe, but I may need to ensure that I am positioned correctly to interact with it.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [7s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, but I have been unable to craft a wooden pickaxe.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to ensure that I'm using the crafting table correctly and that I have the right materials. I have enough materials to craft a wooden pickaxe (2 oak_planks and 1 stick).",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, but I have been unable to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, but I have failed to craft a wooden pickaxe multiple times.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to ensure that I am correctly using the crafting table and that I have all the required materials (2 oak_planks and 1 stick) in my inventory.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, but I have failed to craft a wooden pickaxe multiple times.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the required materials to craft a wooden pickaxe.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I have all the necessary materials (2 oak_planks and 1 stick) to craft a wooden pickaxe, and the crafting table is within reach.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the required materials to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, but I have been unable to craft a wooden pickaxe.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to ensure that I am at the correct position to interact with the crafting table and that I have all the required materials (2 oak_planks and 1 stick).",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, but I have been unable to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the necessary materials to craft a wooden pickaxe.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to ensure I am at the correct position to use the crafting table and that I have all required materials (2 oak_planks and 1 stick). I have failed to craft before, likely due to not being properly positioned.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the necessary materials to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the necessary materials to craft a wooden pickaxe.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to ensure that I'm correctly positioned to interact with the crafting table. Since I have previously failed to craft, I will double-check that I am at the right location.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the necessary materials to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [7s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the materials needed to craft a wooden pickaxe.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to ensure I can interact with the crafting table and that I have the required materials (2 oak_planks and 1 stick). Given the previous failures, I should try interacting with the crafting table directly.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the materials needed to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the materials needed to craft a wooden pickaxe.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to ensure I can successfully interact with the crafting table. Previous attempts to craft failed, likely due to not being properly positioned relative to the crafting table.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the materials needed to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the materials needed to craft a wooden pickaxe, but I am currently unable to craft it.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to ensure that I am properly positioned to interact with the crafting table and that I have the required materials. Previous attempts to craft failed, likely due to not being positioned right.",
+  "plan": ["move -50 67 -33", "craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -50 67 -33
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the materials needed to craft a wooden pickaxe, but I am currently unable to craft it.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (2 tasks)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 move (-50, 67, -33)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.3m)
+   ❌ Failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] ❌ No craftable recipe for wooden_pickaxe - missing materials
+   ❌ Failed: 
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Materials: oak_log(134, 2), oak_planks(36, 2), stick(946, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 821: oak_fence_gate (oak_planks x2 + stick x4)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [4s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [3s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [2s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [1s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+❌ Failed: move -50 67 -33: Execution failed, craft 913: Execution failed
+
+🚨 CRITICAL: "craft" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the materials needed to craft a wooden pickaxe. However, my hand is currently empty.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to equip a pickaxe before I can craft. Since I cannot craft without a pickaxe in hand, I will first craft a wooden pickaxe using the materials I have.",
+  "plan": ["craft 911"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: craft 911
+[PlanParser] 📦 Inventory Analysis: I have 2 oak_logs, 2 oak_planks, 4 sticks, and 1 crafting_table in my inventory. The crafting table is placed nearby, and I have the materials needed to craft a wooden pickaxe. However, my hand is currently empty.
+[PlanParser] ✅ Parsed plan with 1 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (1 tasks)
+🎯 craft 1x 911
+[ActionExecutor] Using item ID 911 (wooden_sword)
+[ActionExecutor] Found recipe for wooden_sword
+[ActionExecutor] Recipe requires:
+[ActionExecutor]   oak_planks x2
+[ActionExecutor]   stick x1
+[ActionExecutor]   wooden_sword x-1
+[ActionExecutor] Recipe requires crafting table
+[ActionExecutor] Found crafting table at distance 1.3
+[ActionExecutor] Starting craft...
+[ActionExecutor] ✅ Successfully crafted 1x wooden_sword
+   ✅ Success
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (4 item types):
+  Tools: wooden_sword(911, 1)
+  Materials: oak_log(134, 2), stick(946, 3)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [12s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [8s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [7s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [6s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [5s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+✅ Completed: craft 911
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword equipped, 2 oak_logs, 3 sticks, and 1 crafting_table in my inventory. I successfully crafted the wooden sword, but I still need to craft a wooden pickaxe.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I need to gather more materials to craft a wooden pickaxe since I currently do not have enough oak_planks. I can craft more oak_planks from the oak_logs I have.",
+  "plan": ["craft 36"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: craft 36
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword equipped, 2 oak_logs, 3 sticks, and 1 crafting_table in my inventory. I successfully crafted the wooden sword, but I still need to craft a wooden pickaxe.
+[PlanParser] ✅ Parsed plan with 1 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (1 tasks)
+🎯 craft 1x 36
+[ActionExecutor] Using item ID 36 (oak_planks)
+[ActionExecutor] Found recipe for oak_planks
+[ActionExecutor] Recipe requires:
+[ActionExecutor]   oak_log x1
+[ActionExecutor]   oak_planks x-4
+[ActionExecutor] Starting craft...
+[ActionExecutor] ✅ Successfully crafted 1x oak_planks
+   ✅ Success
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (5 item types):
+  Tools: wooden_sword(911, 1)
+  Materials: oak_log(134, 1), stick(946, 3), oak_planks(36, 4)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 332: crafting_table (oak_planks x4)
+  ID 911: wooden_sword (oak_planks x2 + stick x1)
+  ID 912: wooden_shovel (oak_planks x1 + stick x2)
+  ID 913: wooden_pickaxe (oak_planks x3 + stick x2)
+  ID 914: wooden_axe (oak_planks x3 + stick x2)
+  ID 915: wooden_hoe (oak_planks x2 + stick x2)
+  ID 946: stick (oak_planks x2)
+  ID 270: oak_slab (oak_planks x3)
+  ID 344: oak_fence (oak_planks x4 + stick x2)
+  ID 751: oak_button (oak_planks x1)
+  ID 767: oak_pressure_plate (oak_planks x2)
+  ID 892: bowl (oak_planks x3)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [16s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [12s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [11s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [10s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [9s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+✅ Completed: craft 36
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 1 oak_log, 4 oak_planks, 3 sticks, and a wooden sword in my inventory. I successfully crafted oak_planks, but I still need to craft a wooden pickaxe, which requires 3 oak_planks and 2 sticks.",
+  "goal": "Craft a wooden pickaxe.",
+  "reasoning": "I currently have enough oak_planks (4) and sticks (3) to craft the wooden pickaxe. I will proceed to craft the wooden pickaxe now that I have the required materials.",
+  "plan": ["craft 913"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: craft 913
+[PlanParser] 📦 Inventory Analysis: I have 1 oak_log, 4 oak_planks, 3 sticks, and a wooden sword in my inventory. I successfully crafted oak_planks, but I still need to craft a wooden pickaxe, which requires 3 oak_planks and 2 sticks.
+[PlanParser] ✅ Parsed plan with 1 tasks
+
+📋 New Plan: Craft a wooden pickaxe. (1 tasks)
+🎯 craft 1x 913
+[ActionExecutor] Using item ID 913 (wooden_pickaxe)
+[ActionExecutor] Found recipe for wooden_pickaxe
+[ActionExecutor] Recipe requires:
+[ActionExecutor]   oak_planks x3
+[ActionExecutor]   stick x2
+[ActionExecutor]   wooden_pickaxe x-1
+[ActionExecutor] Recipe requires crafting table
+[ActionExecutor] Found crafting table at distance 1.3
+[ActionExecutor] Starting craft...
+[ActionExecutor] ✅ Successfully crafted 1x wooden_pickaxe
+   ✅ Success
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-49, 68, -33)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: empty
+
+NEARBY RESOURCES:
+  iron_ore: 4 found, closest at 12m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 12m S (-54, 67, -22)
+✓ crafting_table: 2 found, closest at 1m W (-50, 67, -33)
+  oak_log: 1 found, closest at 4m W (-53, 66, -34)
+  stone: 5 found, closest at 11m ↓ (-59, 64, -33)
+
+INVENTORY (6 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1)
+  Other: crafting_table(332, 1)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [20s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [16s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [15s ago] move failed: Already at or near (-50, 67, -33). Current position: (-50, 68, -33) (at (-49, 68, -33))
+  [14s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [13s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+
+New player message: "Previous goal: "Craft a wooden pickaxe."
+✅ Completed: craft 913
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have 1 oak_log, 1 oak_plank, 1 stick, a wooden sword, and a wooden pickaxe in my inventory. I have successfully crafted the wooden pickaxe, which allows me to mine valuable ores.",
+  "goal": "Mine iron ore.",
+  "reasoning": "I need to gather resources, and I have a wooden pickaxe equipped, which is suitable for mining iron ore. The nearest iron ore is located approximately 12m below me.",
+  "plan": ["move -51 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -51 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have 1 oak_log, 1 oak_plank, 1 stick, a wooden sword, and a wooden pickaxe in my inventory. I have successfully crafted the wooden pickaxe, which allows me to mine valuable ores.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-51, 63, -22)
+[ActionExecutor] 🚶 Moving from (-50, 68, -33) to (-51, 63, -22) [11.8m]
+   ❌ Failed: Movement timeout - could not reach (-51, 63, -22) in 15 seconds
+🎯 move (-51, 63, -22)
+[ActionExecutor] 🚶 Moving from (-51, 70, -24) to (-51, 63, -22) [7.2m]
+[ActionExecutor] ⚠️ Bot appears stuck at (-50.3808446011123, 69, -23.499999999999996)
+[ActionExecutor] 🚨 Attempting to escape stuck situation...
+[ActionExecutor] Breaking dirt to escape
+[ActionExecutor] Breaking dirt to escape
+[ActionExecutor] Breaking dirt to escape
+[ActionExecutor] ❌ Could not find blocks to break for escape
+   ❌ Failed: Movement stuck - bot is trapped and cannot escape
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 68, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 5m ↓ (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 67, -21)
+✓ crafting_table: 2 found, closest at 11m N (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 68, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 3)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [38s ago] craft failed: craft 913 failed (at (-49, 68, -33))
+  [8s ago] move failed: Movement timeout - could not reach (-51, 63, -22) in 15 seconds (at (-50, 70, -23))
+  [2s ago] move failed: Movement stuck - bot is trapped and cannot escape (at (-51, 68, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 68, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 68, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -51 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+⚠️ Some tasks failed - check if resources are unavailable or too far.
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 3 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned above iron ore, but I am unable to mine it due to being stuck.",
+  "goal": "Mine iron ore.",
+  "reasoning": "Since I am stuck and unable to move to the iron ore, I need to find a way to free myself. Once I am free, I can then proceed to mine the iron ore.",
+  "plan": ["move -51 67 -22", "move -51 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -51 67 -22
+[CommandParser] Parsing: move -51 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 3 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned above iron ore, but I am unable to mine it due to being stuck.
+[PlanParser] ✅ Parsed plan with 3 tasks
+
+📋 New Plan: Mine iron ore. (3 tasks)
+🎯 move (-51, 67, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 67, -22). Current position: (-51, 68, -23)
+🎯 move (-51, 67, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 67, -22). Current position: (-51, 68, -23)
+🎯 move (-51, 63, -22)
+[ActionExecutor] 🚶 Moving from (-51, 68, -23) to (-51, 63, -22) [5.0m]
+   ✅ Success
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [14s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 68, -22))
+  [10s ago] move failed: Already at or near (-51, 67, -22). Current position: (-51, 68, -23) (at (-51, 68, -22))
+  [9s ago] move failed: Already at or near (-51, 67, -22). Current position: (-51, 68, -23) (at (-51, 68, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+✅ Completed: move -51 63 -22
+❌ Failed: move -51 67 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and can see iron ore 1 meter to the west.",
+  "goal": "Mine iron ore.",
+  "reasoning": "I have a wooden pickaxe equipped, which is the correct tool for mining iron ore. I need to move to the correct position and attempt to mine the iron ore again.",
+  "plan": ["move -52 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -52 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and can see iron ore 1 meter to the west.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-52, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.8m)
+   ❌ Failed: Already at or near (-52, 63, -22). Current position: (-51, 64, -23)
+🎯 move (-52, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.8m)
+   ❌ Failed: Already at or near (-52, 63, -22). Current position: (-51, 64, -23)
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [4s ago] move failed: Already at or near (-52, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [3s ago] move failed: Already at or near (-52, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -52 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and can see iron ore 1 meter to the west. However, I am unable to mine it due to an issue with tool requirements.",
+  "goal": "Mine iron ore.",
+  "reasoning": "I have the correct tool equipped (a wooden pickaxe), but I am facing issues with movement and mining. I will attempt to move to the exact coordinates of the iron ore and try mining it again.",
+  "plan": ["move -51 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -51 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and can see iron ore 1 meter to the west. However, I am unable to mine it due to an issue with tool requirements.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [4s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [3s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -51 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and have a wooden pickaxe equipped, but I am facing issues mining the iron ore.",
+  "goal": "Mine iron ore.",
+  "reasoning": "I need to ensure that I can successfully mine the iron ore. I am equipped with the correct tool (wooden pickaxe) but have been unable to mine due to movement and positioning issues.",
+  "plan": ["move -51 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -51 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and have a wooden pickaxe equipped, but I am facing issues mining the iron ore.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [4s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [3s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -51 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and have a wooden pickaxe equipped.",
+  "goal": "Mine iron ore.",
+  "reasoning": "I have the correct tool (wooden pickaxe) equipped, but there seems to be an issue with the mining action failing. I will try moving to the exact coordinates of the iron ore and attempt to mine it again.",
+  "plan": ["move -51 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -51 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and have a wooden pickaxe equipped.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [4s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [3s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -51 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and have a wooden pickaxe equipped, but I am unable to mine the iron ore.",
+  "goal": "Mine iron ore.",
+  "reasoning": "Despite having the correct tool equipped, the mining action is failing. I will check my position relative to the iron ore and try to get closer to ensure I can mine it successfully.",
+  "plan": ["move -51 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -51 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and have a wooden pickaxe equipped, but I am unable to mine the iron ore.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [4s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [3s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -51 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and have a wooden pickaxe equipped, but I am unable to mine the iron ore.",
+  "goal": "Mine iron ore.",
+  "reasoning": "Despite having the correct tool equipped, the mining action is failing repeatedly. I need to reassess my approach and ensure I can successfully mine the iron ore. I will move to a different position and try mining again.",
+  "plan": ["move -52 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -52 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) and have a wooden pickaxe equipped, but I am unable to mine the iron ore.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-52, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.8m)
+   ❌ Failed: Already at or near (-52, 63, -22). Current position: (-51, 64, -23)
+🎯 move (-52, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.8m)
+   ❌ Failed: Already at or near (-52, 63, -22). Current position: (-51, 64, -23)
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [4s ago] move failed: Already at or near (-52, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [3s ago] move failed: Already at or near (-52, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -52 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) with a wooden pickaxe equipped, but I am facing repeated failures when attempting to mine the iron ore.",
+  "goal": "Mine iron ore.",
+  "reasoning": "Even though I have the correct tool equipped, the mining action has failed consistently. I will attempt to investigate the situation further by checking my current position and reevaluating my approach to mining the iron ore.",
+  "plan": ["move -51 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -51 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) with a wooden pickaxe equipped, but I am facing repeated failures when attempting to mine the iron ore.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [4s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [3s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -51 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
+
+================================================================================
+📤 LLM OUTPUT:
+--------------------------------------------------------------------------------
+{
+  "inventory_analysis": "I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) with a wooden pickaxe equipped, but I am unable to mine the iron ore.",
+  "goal": "Mine iron ore.",
+  "reasoning": "I have the correct tool equipped, but the mining action keeps failing. I need to check my current position relative to the iron ore and ensure I can actually reach it to perform the mining action.",
+  "plan": ["move -51 63 -22", "mine iron_ore 1"]
+}
+================================================================================
+
+[PlanParser] Parsing LLM response...
+[CommandParser] Parsing: move -51 63 -22
+[CommandParser] Parsing: mine iron_ore 1
+[PlanParser] 📦 Inventory Analysis: I have a wooden sword, a wooden pickaxe, 1 oak_log, 36 oak_planks, 1 stick, 7 cobblestones, 4 dirt blocks, and 3 leaf litters in my inventory. I am currently positioned at (-51, 64, -22) with a wooden pickaxe equipped, but I am unable to mine the iron ore.
+[PlanParser] ✅ Parsed plan with 2 tasks
+
+📋 New Plan: Mine iron ore. (2 tasks)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 move (-51, 63, -22)
+[ActionExecutor] ℹ️  Already at target location (distance: 1.2m)
+   ❌ Failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23)
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+🎯 mine 1x iron_ore
+   ❌ Failed: Cannot mine iron_ore - missing required tool
+
+================================================================================
+📥 LLM INPUT:
+--------------------------------------------------------------------------------
+Current Situation:
+STATUS:
+Position: (-51, 64, -22)
+Health: 20.0/20 | Food: 20/20 | Level: 0
+WARNINGS: 🌙 NIGHT TIME (more dangerous)
+
+EQUIPPED:
+  Hand: wooden_pickaxe (ID:913)
+
+NEARBY RESOURCES:
+  iron_ore: 5 found, closest at 1m W (-51, 63, -22)
+  coal_ore: 5 found, closest at 3m W (-53, 66, -21)
+✓ crafting_table: 2 found, closest at 11m ↑ (-51, 67, -33)
+  stone: 5 found, closest at 1m W (-51, 64, -22)
+  oak_log: 3 found, closest at 12m N (-53, 66, -34)
+
+INVENTORY (9 item types):
+  Tools: wooden_sword(911, 1), wooden_pickaxe(913, 1)
+  Materials: oak_log(134, 1), oak_planks(36, 1), stick(946, 1), cobblestone(35, 7)
+  Other: crafting_table(332, 1), dirt(28, 4), leaf_litter(260, 3)
+
+CRAFTABLE:
+  ID 36: oak_planks (oak_log x1)
+  ID 921: stone_sword (cobblestone x2 + stick x1)
+  ID 288: cobblestone_slab (cobblestone x3)
+  ID 336: cobblestone_stairs (cobblestone x6)
+  ID 456: cobblestone_wall (cobblestone x6)
+  ID 732: lever (cobblestone x1 + stick x1)
+  ID 751: oak_button (oak_planks x1)
+
+⚠️ RECENT FAILURES (learn from these!):
+  [8s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [4s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [3s ago] move failed: Already at or near (-51, 63, -22). Current position: (-51, 64, -23) (at (-51, 64, -22))
+  [2s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+  [1s ago] mine failed: Cannot mine iron_ore - missing required tool (at (-51, 64, -22))
+
+New player message: "Previous goal: "Mine iron ore."
+❌ Failed: move -51 63 -22: Execution failed, mine iron_ore 1: Execution failed
+
+🚨 CRITICAL: "mine" failed 3 times!
+⚠️ STOP and REASSESS from the beginning!
+⚠️ You are probably missing a PREREQUISITE step OR trying something IMPOSSIBLE.
+⚠️ Ask yourself: What basic things do I need BEFORE attempting this?
+⚠️ Examples:
+   - Can't craft without crafting table? Do you HAVE one in inventory? Is it PLACED on ground?
+   - Can't mine without tool? Do you have the RIGHT tool? Is it EQUIPPED?
+   - Can't craft item? Do you have ALL materials including intermediate items?
+
+⚠️ CRITICAL: Try a DIFFERENT action, not the same one again!
+
+
+Check your INVENTORY carefully!
+Don't repeat tasks if you already have the materials.
+What should I do next?"
+
+⚠️ CRITICAL: Respond ONLY with valid JSON in THIS EXACT FORMAT (no other fields allowed):
+{
+  "inventory_analysis": "string describing what you have",
+  "goal": "string describing your final goal",
+  "reasoning": "string explaining your approach",
+  "plan": ["command1", "command2", "command3"]
+}
+
+If there were recent failures, add:
+  "failure_analysis": "string explaining why failures occurred"
+
+DO NOT use fields like "task", "next_steps", "action", or any other structure.
+Commands in "plan" array must be exact strings like: "craft 36", "move 120 64 210", "mine stone 20"
+================================================================================
